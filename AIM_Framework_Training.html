@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIM Prompt Framework — Interactive Training Guide</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --bg-card: #ffffff;
+    --bg-secondary: #f4f3ef;
+    --text-primary: #1a1a18;
+    --text-secondary: #5a5a56;
+    --text-muted: #8a8a84;
+    --border: rgba(0,0,0,0.1);
+    --border-strong: rgba(0,0,0,0.2);
+    --blue-50: #E6F1FB; --blue-200: #85B7EB; --blue-600: #185FA5; --blue-800: #0C447C;
+    --green-50: #E1F5EE; --green-200: #5DCAA5; --green-600: #0F6E56; --green-800: #085041;
+    --amber-50: #FAEEDA; --amber-200: #EF9F27; --amber-600: #854F0B; --amber-800: #633806;
+    --red-50: #FCEBEB; --red-200: #F09595; --red-600: #A32D2D;
+    --gray-100: #D3D1C7; --gray-700: #444441;
+    --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-pill: 999px;
+    --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --font-mono: 'Courier New', Courier, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a18; --bg-card: #242422; --bg-secondary: #2e2e2c;
+      --text-primary: #f0efe8; --text-secondary: #a8a89e; --text-muted: #68685e;
+      --border: rgba(255,255,255,0.1); --border-strong: rgba(255,255,255,0.2);
+      --blue-50: #0c2840; --blue-800: #B5D4F4;
+      --green-50: #082a1e; --green-800: #9FE1CB;
+      --amber-50: #2a1e08; --amber-800: #FAC775;
+      --red-50: #2a0e0e; --red-600: #F09595;
+      --gray-100: #3a3a36; --gray-700: #c8c8c0;
+    }
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  .site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .site-logo { font-size: 15px; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 10px; }
+  .logo-badge { background: var(--text-primary); color: var(--bg); font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.08em; }
+  .header-sub { font-size: 13px; color: var(--text-muted); }
+
+  /* LAYOUT */
+  .shell { display: flex; min-height: calc(100vh - 56px); }
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--bg-card);
+    border-right: 1px solid var(--border);
+    padding: 1.5rem 0;
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+  }
+  .sidebar-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); padding: 0 1.25rem 0.5rem; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 1.25rem;
+    font-size: 14px; color: var(--text-secondary);
+    cursor: pointer; transition: all 0.12s;
+    border-left: 2px solid transparent;
+    text-decoration: none;
+  }
+  .nav-item:hover { background: var(--bg-secondary); color: var(--text-primary); }
+  .nav-item.active { color: var(--text-primary); font-weight: 500; border-left-color: var(--text-primary); background: var(--bg-secondary); }
+  .nav-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  .main { flex: 1; padding: 2.5rem 3rem; max-width: 840px; }
+
+  /* SECTIONS */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* TYPOGRAPHY */
+  h1 { font-size: 26px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+  h2 { font-size: 20px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+  h3 { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+  p { font-size: 15px; color: var(--text-secondary); line-height: 1.75; }
+  .subtitle { font-size: 15px; color: var(--text-muted); margin-bottom: 2rem; }
+
+  /* CARDS */
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem; }
+
+  /* LAYER CARDS */
+  .layer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 2rem; }
+  .layer-card { border-radius: var(--radius-lg); padding: 1.5rem; border: 1px solid; }
+  .layer-a { background: var(--blue-50); border-color: var(--blue-200); }
+  .layer-i { background: var(--green-50); border-color: var(--green-200); }
+  .layer-m { background: var(--amber-50); border-color: var(--amber-200); }
+  .layer-letter { font-size: 32px; font-weight: 700; margin-bottom: 6px; }
+  .layer-a .layer-letter { color: var(--blue-800); }
+  .layer-i .layer-letter { color: var(--green-800); }
+  .layer-m .layer-letter { color: var(--amber-800); }
+  .layer-a h3, .layer-a p { color: var(--blue-600); }
+  .layer-i h3, .layer-i p { color: var(--green-600); }
+  .layer-m h3, .layer-m p { color: var(--amber-600); }
+
+  /* BADGES */
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: var(--radius-pill); }
+  .badge-blue { background: var(--blue-50); color: var(--blue-800); border: 1px solid var(--blue-200); }
+  .badge-green { background: var(--green-50); color: var(--green-800); border: 1px solid var(--green-200); }
+  .badge-amber { background: var(--amber-50); color: var(--amber-800); border: 1px solid var(--amber-200); }
+  .badge-red { background: var(--red-50); color: var(--red-600); border: 1px solid var(--red-200); }
+  .badge-gray { background: var(--gray-100); color: var(--gray-700); }
+
+  /* COMPARE */
+  .tab-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .tab { padding: 7px 16px; border-radius: var(--radius-pill); font-size: 13px; cursor: pointer; border: 1px solid var(--border); background: var(--bg-secondary); color: var(--text-secondary); transition: all 0.12s; }
+  .tab:hover { border-color: var(--border-strong); color: var(--text-primary); }
+  .tab.active { background: var(--text-primary); color: var(--bg); border-color: var(--text-primary); }
+
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 1rem; }
+  @media (max-width: 640px) { .compare-grid { grid-template-columns: 1fr; } }
+  .prompt-box { border-radius: var(--radius-md); padding: 1.25rem; font-size: 13px; line-height: 1.7; font-family: var(--font-mono); white-space: pre-wrap; }
+  .prompt-bad { background: var(--red-50); border: 1px solid var(--red-200); color: #3a0e0e; }
+  .prompt-good { background: var(--green-50); border: 1px solid var(--green-200); color: #062014; }
+  @media (prefers-color-scheme: dark) {
+    .prompt-bad { color: #f4c0c0; }
+    .prompt-good { color: #a0e8cc; }
+  }
+  .prompt-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; font-family: var(--font); }
+  .prompt-bad .prompt-label { color: var(--red-600); }
+  .prompt-good .prompt-label { color: var(--green-600); }
+
+  .annotation { border-left: 3px solid var(--border); padding: 6px 0 6px 14px; margin: 10px 0; }
+  .annotation p { font-size: 13px; }
+
+  /* MISTAKES */
+  .mistake-row { display: grid; grid-template-columns: 1fr 1.4fr; gap: 16px; padding: 1rem 0; border-bottom: 1px solid var(--border); align-items: start; }
+  .mistake-row:last-child { border-bottom: none; }
+  .mistake-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+  .mistake-why { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+
+  /* CHECKLIST */
+  .checklist { list-style: none; margin: 10px 0; }
+  .checklist li { display: flex; gap: 10px; font-size: 14px; color: var(--text-secondary); padding: 5px 0; line-height: 1.5; align-items: flex-start; }
+  .check-dot { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; }
+  .check-dot-blue { background: var(--blue-50); border: 1.5px solid var(--blue-200); }
+  .check-dot-green { background: var(--green-50); border: 1.5px solid var(--green-200); }
+  .check-dot-amber { background: var(--amber-50); border: 1.5px solid var(--amber-200); }
+
+  /* BUILDER */
+  .builder-block { margin-bottom: 1.75rem; }
+  .builder-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .builder-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .dot-blue { background: var(--blue-600); }
+  .dot-green { background: var(--green-600); }
+  .dot-amber { background: var(--amber-600); }
+  textarea {
+    width: 100%; padding: 12px 14px;
+    border-radius: var(--radius-md); border: 1px solid var(--border);
+    font-size: 13px; font-family: var(--font); color: var(--text-primary);
+    background: var(--bg-card); line-height: 1.65; resize: vertical;
+    transition: border-color 0.15s;
+  }
+  textarea:focus { outline: none; border-color: var(--border-strong); }
+  .tip { font-size: 12px; color: var(--text-muted); margin-top: 5px; }
+
+  /* BUTTONS */
+  .btn-primary {
+    padding: 10px 22px; background: var(--text-primary); color: var(--bg);
+    border: none; border-radius: var(--radius-md); font-size: 14px;
+    font-weight: 500; cursor: pointer; transition: opacity 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-secondary {
+    padding: 9px 18px; background: var(--bg-card); color: var(--text-secondary);
+    border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 14px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .btn-secondary:hover { border-color: var(--border-strong); color: var(--text-primary); }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 1rem; }
+
+  /* OUTPUT */
+  .output-box {
+    background: var(--bg-secondary); border-radius: var(--radius-md);
+    padding: 1.25rem; font-size: 13px; line-height: 1.75;
+    color: var(--text-primary); white-space: pre-wrap;
+    font-family: var(--font-mono); margin-top: 1.25rem;
+    border: 1px solid var(--border);
+  }
+
+  /* SCORECARD */
+  .score-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+  .score-row:last-of-type { border-bottom: none; }
+  .score-label { font-size: 13px; color: var(--text-secondary); flex: 1; }
+  .score-track { flex: 1.5; background: var(--bg-secondary); border-radius: 4px; height: 6px; }
+  .score-fill { height: 6px; border-radius: 4px; transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .score-val { font-size: 13px; font-weight: 600; color: var(--text-primary); min-width: 32px; text-align: right; }
+  .score-verdict { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+  .score-overall { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+  .score-msg { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+
+  /* JOANIE TABS */
+  .joanie-panel { display: none; }
+  .joanie-panel.active { display: block; }
+
+  /* PROGRESS TRACKER */
+  .progress-bar { background: var(--border); height: 3px; border-radius: 2px; margin: 0 1.25rem 1.5rem; }
+  .progress-fill { height: 3px; border-radius: 2px; background: var(--text-primary); transition: width 0.3s; }
+
+  /* SECTION INTRO BAND */
+  .intro-band { background: var(--bg-secondary); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 2rem; display: flex; gap: 1.5rem; align-items: flex-start; }
+  .intro-icon { font-size: 32px; flex-shrink: 0; }
+  .intro-text h2 { margin-bottom: 4px; }
+
+  /* HIDDEN UTILITY */
+  .hidden { display: none !important; }
+  .mt-1 { margin-top: 1rem; }
+  .mb-1 { margin-bottom: 1rem; }
+  .mb-2 { margin-bottom: 2rem; }
+
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main { padding: 1.5rem; max-width: 100%; }
+    .mistake-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-logo">
+    <span class="logo-badge">AIM</span>
+    Prompt Framework
+  </div>
+  <span class="header-sub">Interactive Training Guide</span>
+</header>
+
+<div class="shell">
+  <nav class="sidebar">
+    <div class="sidebar-label">Navigation</div>
+
+    <div class="progress-bar"><div class="progress-fill" id="progress" style="width:14%"></div></div>
+
+    <a class="nav-item active" onclick="showSection('intro', this, 14)">
+      <span class="nav-dot" style="background:#888"></span> What is AIM?
+    </a>
+    <a class="nav-item" onclick="showSection('layers', this, 28)">
+      <span class="nav-dot" style="background: #378ADD"></span> The three layers
+    </a>
+    <a class="nav-item" onclick="showSection('compare', this, 42)">
+      <span class="nav-dot" style="background: #1D9E75"></span> Good vs bad prompts
+    </a>
+    <a class="nav-item" onclick="showSection('mistakes', this, 56)">
+      <span class="nav-dot" style="background: #E24B4A"></span> Common mistakes
+    </a>
+    <a class="nav-item" onclick="showSection('joanie', this, 70)">
+      <span class="nav-dot" style="background: #BA7517"></span> Meet Joanie
+    </a>
+    <a class="nav-item" onclick="showSection('builder', this, 100)">
+      <span class="nav-dot" style="background: #533AB7"></span> Prompt builder
+    </a>
+  </nav>
+
+  <main class="main">
+
+    <!-- INTRO -->
+    <div class="section active" id="intro">
+      <h1>Build agents that actually work</h1>
+      <p class="subtitle">A structured approach to turning general-purpose AI into a focused, high-performance agent</p>
+
+      <div class="layer-grid">
+        <div class="layer-card layer-a">
+          <div class="layer-letter">A</div>
+          <h3>Actor</h3>
+          <p>Who the AI must become — persona, expertise, mental models, scope guards</p>
+        </div>
+        <div class="layer-card layer-i">
+          <div class="layer-letter">I</div>
+          <h3>Input</h3>
+          <p>What context you'll provide — data types, terminology, standing assumptions</p>
+        </div>
+        <div class="layer-card layer-m">
+          <div class="layer-letter">M</div>
+          <h3>Mission</h3>
+          <p>The specific outcome to achieve — goals, output format, escalation rules</p>
+        </div>
+      </div>
+
+      <div class="card mb-2">
+        <h3 class="mb-1">Why AIM beats ad hoc prompting</h3>
+        <p>Most people stop at a job title. "Act as a CFO" tells the model almost nothing — no domain focus, no reasoning frame, no output structure. The difference between that and a fully specified AIM prompt is the difference between generic commentary and commercially precise, domain-specific analysis.</p>
+        <p style="margin-top:10px;">A strong AIM prompt takes 20–30 minutes to write. It pays back in every session that follows.</p>
+      </div>
+
+      <div class="card">
+        <h3 class="mb-1">How to use this guide</h3>
+        <p>Work through each section using the sidebar. The <strong>Prompt builder</strong> at the end lets you draft and score your own AIM prompt — use it to practice what you've learned.</p>
+      </div>
+
+      <div class="btn-row mt-1">
+        <button class="btn-primary" onclick="showSection('layers', document.querySelector('[onclick*=layers]'), 28)">Start with the three layers →</button>
+      </div>
+    </div>
+
+    <!-- LAYERS -->
+    <div class="section" id="layers">
+      <h1>The three layers</h1>
+      <p class="subtitle">Each layer does a distinct job. Skip one and the agent drifts.</p>
+
+      <div class="card mb-1">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+          <span style="font-size:28px;font-weight:700;color:var(--blue-600);">A</span>
+          <span class="badge badge-blue">Actor — who the AI becomes</span>
+        </div>
+        <h3 class="mb-1">Define the persona, not just the job title</h3>
+        <p style="margin-bottom:14px;">The Actor layer specifies the persona the AI inhabits. The more precisely you define its domain expertise, mental models, and communication style, the more consistently it reasons within that frame across varied queries.</p>
+        <ul class="checklist">
+          <li><span class="check-dot check-dot-blue"></span>Seniority and functional domain — e.g. "Chief Revenue Officer with 15+ years in programmatic media"</li>
+          <li><span class="check-dot check-dot-blue"></span>Frameworks the actor uses — e.g. "thinks in yield curves, margin waterfalls, supply-demand elasticity"</li>
+          <li><span class="check-dot check-dot-blue"></span>Communication style — e.g. "direct, commercially minded, data-first recommendations"</li>
+          <li><span class="check-dot check-dot-blue"></span>Scope guards — explicit statements of what the actor does NOT do, to prevent drift</li>
+        </ul>
+        <div class="annotation mt-1">
+          <p><strong>Key insight:</strong> Mental model specifications ("you think in X") steer the AI's reasoning process — not just its vocabulary. This is what separates domain-specific analysis from generic commentary.</p>
+        </div>
+      </div>
+
+      <div class="card mb-1">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+          <span style="font-size:28px;font-weight:700;color:var(--green-600);">I</span>
+          <span class="badge badge-green">Input — what context you'll provide</span>
+        </div>
+        <h3 class="mb-1">Prime the agent to interpret your data correctly</h3>
+        <p style="margin-bottom:14px;">The Input layer tells the model exactly what kind of information you'll share — formats, data types, terminology, and standing assumptions. With it, you can drop raw data into chat with no preamble and the agent already knows what to do with it.</p>
+        <ul class="checklist">
+          <li><span class="check-dot check-dot-green"></span>Your role and decision-making scope within the organisation</li>
+          <li><span class="check-dot check-dot-green"></span>Types of data you'll share — reports, metric tables, written briefs, raw exports</li>
+          <li><span class="check-dot check-dot-green"></span>Internal terminology — define the language your business uses so the agent speaks it fluently</li>
+          <li><span class="check-dot check-dot-green"></span>Standing constraints and assumptions — budget cycles, platform mix, key partners, revenue definitions</li>
+        </ul>
+        <div class="annotation mt-1">
+          <p><strong>Key insight:</strong> Standing definitions (e.g. "all revenue is net unless stated otherwise") remove ambiguity that would otherwise degrade every analysis. You write them once; they apply to every session.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+          <span style="font-size:28px;font-weight:700;color:var(--amber-600);">M</span>
+          <span class="badge badge-amber">Mission — the outcome to achieve</span>
+        </div>
+        <h3 class="mb-1">Lock the output format and define success</h3>
+        <p style="margin-bottom:14px;">The Mission layer states the purpose — what the actor should help accomplish, how responses should be structured, and what success looks like. A locked output format makes every response consistent, scannable, and immediately actionable.</p>
+        <ul class="checklist">
+          <li><span class="check-dot check-dot-amber"></span>Primary goal stated in one clear sentence</li>
+          <li><span class="check-dot check-dot-amber"></span>Output format preferences — structured analysis, action steps, trade-off tables</li>
+          <li><span class="check-dot check-dot-amber"></span>Escalation language — when the agent should push back, flag risk, or ask for clarification</li>
+          <li><span class="check-dot check-dot-amber"></span>A definition of what a "great" response looks like in this specific context</li>
+        </ul>
+        <div class="annotation mt-1">
+          <p><strong>Key insight:</strong> A "sharp question" instruction at the end of the Mission shifts the agent from answering mode into a coaching posture — it pushes your thinking rather than just responding to it.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPARE -->
+    <div class="section" id="compare">
+      <h1>Good vs bad prompts</h1>
+      <p class="subtitle">See what each AIM layer looks like when done well — and when it isn't.</p>
+
+      <div class="tab-row">
+        <button class="tab active" onclick="showExample('ex-actor', this)">Actor layer</button>
+        <button class="tab" onclick="showExample('ex-input', this)">Input layer</button>
+        <button class="tab" onclick="showExample('ex-mission', this)">Mission layer</button>
+      </div>
+
+      <!-- Actor example -->
+      <div id="ex-actor">
+        <div class="compare-grid">
+          <div class="prompt-box prompt-bad">
+            <div class="prompt-label">Without AIM</div>Act as a CFO. Help me with revenue.</div>
+          <div class="prompt-box prompt-good">
+            <div class="prompt-label">With AIM — Actor layer</div>You are a Chief Revenue Officer with 15+ years in digital media and programmatic advertising. You think in margin waterfalls and CPM yield curves. You communicate in a direct, commercially precise style — leading with business impact, then supporting rationale. You do NOT give generic marketing advice unless it has a direct revenue implication.</div>
+        </div>
+        <div class="card">
+          <h3 class="mb-1">Why the difference matters</h3>
+          <div class="annotation"><p><strong>"15+ years in digital media, programmatic advertising"</strong> — anchors the knowledge base to domain-specific reasoning, not generic business advice.</p></div>
+          <div class="annotation"><p><strong>"You think in margin waterfalls, CPM yield curves"</strong> — mental models steer how the agent frames every analysis, not just what vocabulary it uses.</p></div>
+          <div class="annotation"><p><strong>"You do NOT give generic marketing advice"</strong> — negative scope constraints are as important as positive ones. They prevent drift into adjacent but irrelevant territory.</p></div>
+        </div>
+      </div>
+
+      <!-- Input example -->
+      <div id="ex-input" class="hidden">
+        <div class="compare-grid">
+          <div class="prompt-box prompt-bad">
+            <div class="prompt-label">Without AIM</div>Here's some data: [pastes table]
+
+What do you think?</div>
+          <div class="prompt-box prompt-good">
+            <div class="prompt-label">With AIM — Input layer</div>You are advising the VP of Media Supply and Demand. They will share revenue and GP data, demand partner performance reports, and supply-side metrics. Assume all revenue figures are net revenue unless stated otherwise. GP = net revenue minus direct supply costs. Platform names may be abbreviated — ask for clarification only if ambiguous.</div>
+        </div>
+        <div class="card">
+          <h3 class="mb-1">Why the difference matters</h3>
+          <div class="annotation"><p><strong>No Input layer</strong> — the agent guesses at data formats and terminology every session. Same data, different interpretations. Inconsistent results.</p></div>
+          <div class="annotation"><p><strong>Pre-declared input types</strong> — drop a raw demand partner report with no preamble. The agent already knows how to interpret it.</p></div>
+          <div class="annotation"><p><strong>Standing definitions</strong> — "all revenue is net unless stated otherwise" removes ambiguity that would otherwise degrade every analysis. Write once, applies everywhere.</p></div>
+        </div>
+      </div>
+
+      <!-- Mission example -->
+      <div id="ex-mission" class="hidden">
+        <div class="compare-grid">
+          <div class="prompt-box prompt-bad">
+            <div class="prompt-label">Without AIM</div>Help me maximise revenue. Give me useful analysis when I share data.</div>
+          <div class="prompt-box prompt-good">
+            <div class="prompt-label">With AIM — Mission layer</div>For every query, you will: (1) identify the core commercial question or risk, (2) provide structured analysis with GP implications, (3) recommend actions ranked by commercial impact, (4) flag trade-offs and data gaps, (5) close with one pointed question to sharpen thinking.
+
+Format: Situation → Implication → Recommendation → Risks → Sharp question.</div>
+        </div>
+        <div class="card">
+          <h3 class="mb-1">Why the difference matters</h3>
+          <div class="annotation"><p><strong>Open-ended mission</strong> — responses vary in shape and depth. Hard to scan, hard to act on. You never know what you'll get.</p></div>
+          <div class="annotation"><p><strong>Locked output format</strong> — every response is consistent and immediately actionable. You always know where to find what you need.</p></div>
+          <div class="annotation"><p><strong>"Close with one pointed question"</strong> — forces a coaching posture. Shifts the agent from answering mode into a genuine thought partner.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MISTAKES -->
+    <div class="section" id="mistakes">
+      <h1>Common mistakes to avoid</h1>
+      <p class="subtitle">Each of these degrades agent performance in a distinct, predictable way.</p>
+
+      <div class="card">
+        <div class="mistake-row">
+          <div>
+            <div class="mistake-title">Writing only a job title as the Actor</div>
+            <span class="badge badge-red">Actor layer</span>
+          </div>
+          <div class="mistake-why">Without mental models and scope guards, the AI defaults to generic reasoning and drifts into adjacent topics. "Act as a CFO" tells the model almost nothing useful.</div>
+        </div>
+        <div class="mistake-row">
+          <div>
+            <div class="mistake-title">Skipping the Input layer entirely</div>
+            <span class="badge badge-red">Input layer</span>
+          </div>
+          <div class="mistake-why">The agent guesses at your data formats and terminology every session, creating inconsistency. Same data, different interpretations — friction on every query.</div>
+        </div>
+        <div class="mistake-row">
+          <div>
+            <div class="mistake-title">Leaving the Mission open-ended</div>
+            <span class="badge badge-red">Mission layer</span>
+          </div>
+          <div class="mistake-why">Without a locked output format, responses vary in shape and depth. Harder to scan, harder to act on — the agent decides what "helpful" looks like, not you.</div>
+        </div>
+        <div class="mistake-row">
+          <div>
+            <div class="mistake-title">Reusing one prompt for different agents</div>
+            <span class="badge badge-amber">All layers</span>
+          </div>
+          <div class="mistake-why">Each agent needs a purpose-built AIM. Reusing prompts across different roles produces a blurred, unfocused persona that doesn't commit to any domain.</div>
+        </div>
+        <div class="mistake-row">
+          <div>
+            <div class="mistake-title">No scope guards in the Actor</div>
+            <span class="badge badge-red">Actor layer</span>
+          </div>
+          <div class="mistake-why">Without explicit "does NOT do" statements, the agent helpfully wanders into irrelevant territory when queries are ambiguous. Scope guards are as important as positive definitions.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JOANIE -->
+    <div class="section" id="joanie">
+      <h1>Meet Joanie</h1>
+      <p class="subtitle">A fully worked example — a virtual CRO built for a VP of Media Supply and Demand. See how each AIM layer was constructed and why.</p>
+
+      <div class="tab-row">
+        <button class="tab active" onclick="showJoanie('j-actor', this)">Actor</button>
+        <button class="tab" onclick="showJoanie('j-input', this)">Input</button>
+        <button class="tab" onclick="showJoanie('j-mission', this)">Mission</button>
+        <button class="tab" onclick="showJoanie('j-use', this)">How to use</button>
+      </div>
+
+      <div class="joanie-panel active" id="j-actor">
+        <div class="prompt-box prompt-good mb-1">
+          <div class="prompt-label">Actor — Joanie's persona</div>You are a Chief Revenue Officer (CRO) with 15+ years of experience in digital media, programmatic advertising, and ad-supported content monetisation. You hold deep expertise in SSP dynamics, yield optimisation, floor price strategy, DSP relationships, PMPs, GP margin analysis, revenue forecasting, and pricing strategy.
+
+You think in margin waterfalls, CPM yield curves, fill-rate/revenue trade-offs, and revenue attribution. You communicate in a direct, commercially precise style — leading with business impact, then supporting rationale. You never hedge without reason. When data is ambiguous, you say so and propose how to resolve it.
+
+You do NOT give generic marketing advice, brand strategy guidance, or content recommendations unless they have a direct revenue or GP implication.</div>
+        <div class="card">
+          <div class="annotation"><p><strong>"15+ years in digital media, programmatic advertising"</strong> — anchors the knowledge base to domain-specific reasoning, not generic business advice.</p></div>
+          <div class="annotation"><p><strong>"You think in margin waterfalls, CPM yield curves"</strong> — explicit mental models steer how the agent frames every analysis, not just vocabulary.</p></div>
+          <div class="annotation"><p><strong>"You do NOT give generic marketing advice"</strong> — negative scope constraints prevent drift into adjacent but irrelevant territory.</p></div>
+        </div>
+      </div>
+
+      <div class="joanie-panel hidden" id="j-input">
+        <div class="prompt-box prompt-good mb-1">
+          <div class="prompt-label">Input — Joanie's context</div>You are advising the VP of Media Supply and Demand at a digital media business. This person manages programmatic supply (open market, PMP, preferred deals, programmatic guaranteed), direct demand relationships and IO-based revenue, inventory yield across owned-and-operated properties, and revenue and GP reporting to senior leadership.
+
+They will share: revenue and GP data (tables, summaries, percentage variances), demand partner performance reports (CPM, fill rate, win rate, spend pacing), supply-side metrics (impressions available, sold, unsold, floor performance), strategic questions about pricing and monetisation, and briefings on deals, RFPs, and partner negotiations.
+
+Assume all revenue figures are net revenue unless stated otherwise. GP = net revenue minus direct supply costs unless the user specifies otherwise. Platform and partner names may be abbreviated — ask for clarification only if ambiguous in context.</div>
+        <div class="card">
+          <div class="annotation"><p><strong>Describing the user's scope</strong> — tells the agent which parts of the organisation to care about, preventing overly broad responses.</p></div>
+          <div class="annotation"><p><strong>Pre-declaring input types</strong> — the agent is primed to interpret data correctly when pasted, without needing framing instructions each time.</p></div>
+          <div class="annotation"><p><strong>Standing assumptions</strong> — removes repetitive clarifications across sessions. Consistency guaranteed in every analysis.</p></div>
+        </div>
+      </div>
+
+      <div class="joanie-panel hidden" id="j-mission">
+        <div class="prompt-box prompt-good mb-1">
+          <div class="prompt-label">Mission — Joanie's purpose</div>Your mission is to act as a trusted commercial advisor and strategic thought partner to help this VP maximise revenue and gross profit across their media supply and demand portfolio.
+
+For every query you receive, you will:
+1. Identify the core commercial question or risk in what they've shared
+2. Provide a structured analysis with clear revenue and/or GP implications
+3. Recommend a specific course of action ranked by commercial impact
+4. Flag any trade-offs, risks, or data gaps affecting the recommendation
+5. Close with one pointed question to sharpen thinking or surface a blind spot
+
+Format your responses as:
+Situation — what the data/context is telling you
+Implication — what this means for revenue or GP
+Recommendation — what to do, in priority order
+Risks & trade-offs — what could go wrong or needs confirming
+Sharp question — one provocation to push thinking further
+
+When the VP shares raw data or a report, lead with the most commercially significant finding — not a summary of what they sent.</div>
+        <div class="card">
+          <div class="annotation"><p><strong>"Identify the core commercial question or risk"</strong> — makes the agent do diagnostic work first, not just respond to the surface question.</p></div>
+          <div class="annotation"><p><strong>Five-part output structure</strong> — a locked format makes every response scannable, consistent, and immediately actionable. You always know where to look.</p></div>
+          <div class="annotation"><p><strong>"Close with one pointed question"</strong> — forces a coaching posture. Models how a real CRO would push a VP to think harder.</p></div>
+        </div>
+      </div>
+
+      <div class="joanie-panel hidden" id="j-use">
+        <div class="card mb-1">
+          <h3 class="mb-1">Starting a session</h3>
+          <p>Paste the full AIM prompt at the start of any new conversation. Claude has no memory between sessions, so the prompt re-establishes Joanie's identity each time. This takes seconds and ensures consistent behaviour every time.</p>
+        </div>
+        <div class="card mb-1">
+          <h3 class="mb-1">Feeding data</h3>
+          <p>Paste raw data — a demand partner report, a revenue table, a floor price analysis — with no preamble. Because the Input layer pre-declares what you'll share, Joanie already knows how to interpret it. A single sentence is enough to orient a query.</p>
+        </div>
+        <div class="card mb-1">
+          <h3 class="mb-1">The sharp question</h3>
+          <p>At the end of every response, Joanie asks one pointed question. Don't ignore it. These questions surface blind spots and push analysis further — even if you don't answer directly, they're useful as a prompt for your own thinking before your next action.</p>
+        </div>
+        <div class="card">
+          <h3 class="mb-1">The dashboard opportunity</h3>
+          <p>Joanie has no memory between sessions. Build a simple log tracking: topic of each session, the recommendation given, the action you took, and the outcome. After a few months, feed the summary back into Joanie as additional context. This creates genuine institutional memory and makes every future session richer.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUILDER -->
+    <div class="section" id="builder">
+      <h1>Prompt builder</h1>
+      <p class="subtitle">Draft your own AIM prompt. Fill in each layer, then preview or score the assembled result.</p>
+
+      <div class="builder-block">
+        <div class="builder-header">
+          <div class="builder-dot dot-blue"></div>
+          <h3>A — Actor</h3>
+          <span class="badge badge-blue">Who the AI becomes</span>
+        </div>
+        <textarea id="actor-input" rows="5" placeholder="Describe the persona. Include: seniority, domain expertise, mental models (how they think), communication style, and what they do NOT do."></textarea>
+        <p class="tip">Tip: "You think in X, Y, Z" is more powerful than "You are an expert in X, Y, Z" — it steers reasoning, not just vocabulary</p>
+      </div>
+
+      <div class="builder-block">
+        <div class="builder-header">
+          <div class="builder-dot dot-green"></div>
+          <h3>I — Input</h3>
+          <span class="badge badge-green">What context you'll provide</span>
+        </div>
+        <textarea id="input-input" rows="5" placeholder="Describe: your role, the types of data you'll share, internal terminology, and any standing assumptions (e.g. how you define key metrics)."></textarea>
+        <p class="tip">Tip: Standing definitions (e.g. "all figures are net unless stated") save repetitive clarification every session</p>
+      </div>
+
+      <div class="builder-block">
+        <div class="builder-header">
+          <div class="builder-dot dot-amber"></div>
+          <h3>M — Mission</h3>
+          <span class="badge badge-amber">The outcome to achieve</span>
+        </div>
+        <textarea id="mission-input" rows="5" placeholder="State: the primary goal, a locked output format (e.g. Situation → Implication → Recommendation), escalation rules, and what a great response looks like."></textarea>
+        <p class="tip">Tip: A locked output format makes every response instantly scannable — you always know where to find what you need</p>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-primary" onclick="previewPrompt()">Preview full prompt</button>
+        <button class="btn-secondary" onclick="scorePrompt()">Score my prompt</button>
+        <button class="btn-secondary" onclick="clearBuilder()">Clear</button>
+      </div>
+
+      <div id="preview-wrap" class="hidden">
+        <p style="font-size:13px;color:var(--text-muted);margin-top:1.5rem 0 6px;">Full assembled prompt — ready to paste into Claude</p>
+        <div class="output-box" id="preview-content"></div>
+      </div>
+
+      <div id="score-wrap" class="hidden">
+        <p style="font-size:13px;color:var(--text-muted);margin-top:1.5rem;margin-bottom:10px;">Prompt scorecard</p>
+        <div class="card" id="score-content"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+function showSection(id, el, pct) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (el) el.classList.add('active');
+  document.getElementById('progress').style.width = pct + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showExample(id, el) {
+  ['ex-actor','ex-input','ex-mission'].forEach(i => {
+    document.getElementById(i).classList.toggle('hidden', i !== id);
+  });
+  document.querySelectorAll('#compare .tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+}
+
+function showJoanie(id, el) {
+  document.querySelectorAll('.joanie-panel').forEach(p => {
+    p.classList.remove('active');
+    p.classList.add('hidden');
+  });
+  const panel = document.getElementById(id);
+  panel.classList.remove('hidden');
+  panel.classList.add('active');
+  document.querySelectorAll('#joanie .tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+}
+
+function previewPrompt() {
+  const a = document.getElementById('actor-input').value.trim();
+  const i = document.getElementById('input-input').value.trim();
+  const m = document.getElementById('mission-input').value.trim();
+  if (!a && !i && !m) { alert('Fill in at least one layer to preview.'); return; }
+  let out = '';
+  if (a) out += '## ACTOR\n' + a + '\n\n';
+  if (i) out += '## INPUT\n' + i + '\n\n';
+  if (m) out += '## MISSION\n' + m;
+  document.getElementById('preview-content').textContent = out.trim();
+  document.getElementById('preview-wrap').classList.remove('hidden');
+  document.getElementById('score-wrap').classList.add('hidden');
+}
+
+function scorePrompt() {
+  const a = document.getElementById('actor-input').value.trim();
+  const i = document.getElementById('input-input').value.trim();
+  const m = document.getElementById('mission-input').value.trim();
+  if (!a && !i && !m) { alert('Fill in at least one layer to score.'); return; }
+
+  const criteria = [
+    { label: 'Actor completeness', text: a, keywords: ['years','experience','domain','expert','senior','director','officer','manager'] },
+    { label: 'Mental models specified', text: a, keywords: ['think in','thinks in','framework','model','curve','waterfall','lens','approach','reason'] },
+    { label: 'Scope guards present', text: a, keywords: ['not','never','do not','avoid','exclude','unless','does not'] },
+    { label: 'Input types pre-declared', text: i, keywords: ['share','data','report','table','metric','export','brief','send','provide'] },
+    { label: 'Standing assumptions defined', text: i, keywords: ['assume','unless','default','defined as','means','definition','terminology','term'] },
+    { label: 'Mission clarity', text: m, keywords: ['goal','objective','maximise','maximize','achieve','help','purpose','mission','assist'] },
+    { label: 'Output format locked', text: m, keywords: ['format','structure','section','step','→','->','respond with','output','always','each'] },
+  ];
+
+  let totalScore = 0;
+  let html = '';
+
+  criteria.forEach(c => {
+    const score = scoreLayer(c.text, c.keywords);
+    const pct = Math.round(score * 100);
+    totalScore += pct;
+    const color = pct >= 70 ? '#639922' : pct >= 40 ? '#BA7517' : '#A32D2D';
+    html += `<div class="score-row">
+      <span class="score-label">${c.label}</span>
+      <div class="score-track"><div class="score-fill" style="width:${pct}%;background:${color};"></div></div>
+      <span class="score-val">${pct}%</span>
+    </div>`;
+  });
+
+  const overall = Math.round(totalScore / criteria.length);
+  const verdict = overall >= 75
+    ? 'Strong prompt — well-specified and ready to use.'
+    : overall >= 45
+    ? 'Good foundation. Consider adding scope guards to the Actor and locking the output format in the Mission.'
+    : 'Needs more detail. Expand each layer: add mental models to the Actor, pre-declare input types, and define a structured output format in the Mission.';
+  const verdictColor = overall >= 75 ? '#3B6D11' : overall >= 45 ? '#854F0B' : '#A32D2D';
+
+  html += `<div class="score-verdict">
+    <div class="score-overall">${overall}%</div>
+    <p class="score-msg" style="color:${verdictColor};">${verdict}</p>
+  </div>`;
+
+  document.getElementById('score-content').innerHTML = html;
+  document.getElementById('score-wrap').classList.remove('hidden');
+  document.getElementById('preview-wrap').classList.add('hidden');
+}
+
+function scoreLayer(text, keywords) {
+  if (!text) return 0;
+  const lower = text.toLowerCase();
+  const hits = keywords.filter(k => lower.includes(k.toLowerCase())).length;
+  return Math.min(hits / Math.max(keywords.length * 0.45, 2), 1);
+}
+
+function clearBuilder() {
+  ['actor-input','input-input','mission-input'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('preview-wrap').classList.add('hidden');
+  document.getElementById('score-wrap').classList.add('hidden');
+}
+</script>
+</body>
+</html>
