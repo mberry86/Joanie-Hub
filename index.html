@@ -134,7 +134,7 @@
   .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
   .section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--white-40); }
 
-  .dash-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 40px; }
+  .dash-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 40px; }
 
   .dash-card {
     background: var(--navy-card); border: 1px solid var(--navy-border);
@@ -197,6 +197,12 @@
   .open-btn-primary.gold-btn { background: var(--gold); border-color: var(--gold); }
   .open-btn-primary.gold-btn:hover { background: #cc8319; }
   .open-btn-primary.purple-btn { background: #534AB7; border-color: #534AB7; }
+
+  .accent-cyan { background: linear-gradient(90deg, #1a8fa8, #29b6d8); }
+  .mono-cyan { background: rgba(41,182,216,0.18); color: #29b6d8; border: 1px solid rgba(41,182,216,0.35); }
+  .kv-cyan { color: #29b6d8; }
+  .open-btn-primary.cyan-btn { background: #29b6d8; border-color: #29b6d8; color: #111; }
+  .open-btn-primary.cyan-btn:hover { background: #22a0c2; border-color: #22a0c2; }
   .open-btn-primary.purple-btn:hover { background: #6059c9; }
   .open-btn-secondary { background: var(--white-08); color: var(--white-40); border: 1px solid var(--navy-border-med); flex: 0; padding: 7px 12px; }
   .open-btn-secondary:hover { background: var(--white-15); color: var(--white-70); }
@@ -339,6 +345,26 @@
       <div class="dash-card-footer">
         <a href="https://joanie-dashboard-zhvj.vercel.app" target="_blank" class="open-btn open-btn-primary purple-btn">Open dashboard →</a>
         <a href="https://www.notion.so/342cb15b390181b6bd7fde262bf69998" target="_blank" class="open-btn open-btn-secondary" title="Open in Notion">◈</a>
+      </div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-card-accent accent-cyan"></div>
+      <div class="dash-card-body">
+        <div class="dash-card-header">
+          <div class="dash-monogram mono-cyan">JP</div>
+          <span class="status-badge status-live">Live · SEP</span>
+        </div>
+        <div class="dash-card-title">API / RevShare<br>Mix Optimizer</div>
+        <div class="dash-card-desc">Joanie Predicts intraday API vs RevShare routing optimizer. Break-even answer rate modeling, hourly P&L by mix, and optimal split recommendations for Media Match and QM Marketplace.</div>
+        <div class="dash-kpi-row">
+          <div class="dash-kpi"><span class="dash-kpi-val kv-cyan">24hr</span><span class="dash-kpi-label">Intraday</span></div>
+          <div class="dash-kpi"><span class="dash-kpi-val kv-cyan">Joanie</span><span class="dash-kpi-label">Predicts</span></div>
+          <div class="dash-kpi"><span class="dash-kpi-val kv-cyan">SEP</span><span class="dash-kpi-label">Season</span></div>
+        </div>
+      </div>
+      <div class="dash-card-footer">
+        <a href="https://api-revshare-optimizer.vercel.app" target="_blank" class="open-btn open-btn-primary cyan-btn">Open dashboard →</a>
+        <a href="https://www.notion.so/7b3a3e80baac4f3ca3ac780ef3ab506c" target="_blank" class="open-btn open-btn-secondary" title="Open in Notion">◈</a>
       </div>
     </div>
 
