@@ -177,8 +177,6 @@
     max-width: 580px; line-height: 1.65;
   }
 
-
-
   /* ── SECTION HEADERS ── */
   .section-header { display: flex; align-items: center; margin-bottom: 16px; }
   .section-label {
@@ -211,6 +209,7 @@
   .accent-gold   { background: var(--dl-amber); }
   .accent-purple { background: var(--dl-purple); }
   .accent-cyan   { background: var(--dl-cyan); }
+  .accent-green  { background: var(--dl-green); }
 
   .dash-card-body { padding: 20px 22px; flex: 1; display: flex; flex-direction: column; }
   .dash-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
@@ -227,6 +226,7 @@
   .mono-gold   { background: var(--dl-amber-dim);  color: var(--dl-amber);  border: 1px solid var(--dl-amber-border); }
   .mono-purple { background: var(--dl-purple-dim); color: var(--dl-purple); border: 1px solid var(--dl-purple-border); }
   .mono-cyan   { background: var(--dl-cyan-dim);   color: var(--dl-cyan);   border: 1px solid var(--dl-cyan-border); }
+  .mono-green  { background: var(--dl-green-dim);  color: var(--dl-green);  border: 1px solid var(--dl-green-border); }
 
   .status-badge {
     display: flex; align-items: center; gap: 5px;
@@ -245,6 +245,16 @@
     width: 5px; height: 5px; border-radius: 50%;
     background: var(--dl-cyan); display: block;
     animation: dl-pulse 2s infinite;
+  }
+  .status-new {
+    background: var(--dl-green-dim);
+    color: var(--dl-green);
+    border: 1px solid var(--dl-green-border);
+  }
+  .status-new::before {
+    content: '';
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--dl-green); display: block;
   }
 
   .dash-card-title {
@@ -271,6 +281,7 @@
   .kv-gold   { color: var(--dl-amber); }
   .kv-purple { color: var(--dl-purple); }
   .kv-cyan   { color: var(--dl-cyan); }
+  .kv-green  { color: var(--dl-green); }
   .dash-kpi-label {
     font-family: var(--dl-font-mono);
     font-size: 9px; color: var(--dl-text-3);
@@ -300,6 +311,8 @@
   .purple-btn:hover          { background: #8c6ef0; border-color: #8c6ef0; }
   .cyan-btn                  { background: var(--dl-cyan);   color: #111; border-color: var(--dl-cyan); }
   .cyan-btn:hover            { background: #22a0c2; border-color: #22a0c2; }
+  .green-btn                 { background: var(--dl-green);  color: #111; border-color: var(--dl-green); }
+  .green-btn:hover           { background: #3ec85e; border-color: #3ec85e; }
   .open-btn-secondary {
     background: transparent; color: var(--dl-text-3);
     border: 1px solid var(--dl-border-md);
@@ -393,7 +406,7 @@
   <div class="nav-right">
     <div class="live-pill">
       <div class="live-dot"></div>
-      6 Dashboards Live
+      7 Dashboards Live
     </div>
   </div>
 </nav>
@@ -416,7 +429,6 @@
     <div class="hero-eyebrow">◈ Joanie Intelligence Suite</div>
     <h1 class="hero-title">Your AI-empowered<br><span>performance command center</span></h1>
     <p class="hero-sub">All Joanie dashboards in one place. Built for Centerfield Health &amp; Medicare to supercharge QM media performance, right pricing, and BD development — all connected to live Notion data.</p>
-
   </div>
 
   <div class="section-header">
@@ -551,6 +563,27 @@
       </div>
     </div>
 
+    <!-- ── NEW: CPS MODEL TOOL ── -->
+    <div class="dash-card">
+      <div class="dash-card-accent accent-green"></div>
+      <div class="dash-card-body">
+        <div class="dash-card-header">
+          <div class="dash-monogram mono-green">CP</div>
+          <span class="status-badge status-new">New</span>
+        </div>
+        <div class="dash-card-title">CPS Model Tool<br>Agency Ops &amp; Media</div>
+        <div class="dash-card-desc">Build and compute Cost per Sale structures for media partners. Graduating tier model, seasonal CPS reset by source, 90-day persistency adjustment, and CFO guardrail checks.</div>
+        <div class="dash-kpi-row">
+          <div class="dash-kpi"><span class="dash-kpi-val kv-green">4</span><span class="dash-kpi-label">Tiers</span></div>
+          <div class="dash-kpi"><span class="dash-kpi-val kv-green">90d</span><span class="dash-kpi-label">Persistency</span></div>
+          <div class="dash-kpi"><span class="dash-kpi-val kv-green">3</span><span class="dash-kpi-label">Seasons</span></div>
+        </div>
+      </div>
+      <div class="dash-card-footer">
+        <a href="./cps-model-tool.html" class="open-btn open-btn-primary green-btn">Open tool →</a>
+      </div>
+    </div>
+
   </div>
 
   <div class="section-header">
@@ -632,7 +665,7 @@
 <div class="dash-footer">
   <strong>Joanie</strong> · AI-Powered Performance Suite &nbsp;·&nbsp;
   Centerfield Health &amp; Medicare &nbsp;·&nbsp;
-  Media Match · QM Right Pricing · BD Command Center &nbsp;·&nbsp;
+  Media Match · QM Right Pricing · BD Command Center · CPS Model Tool &nbsp;·&nbsp;
   <strong>"We Supercharge Your Customer Acquisition"</strong>
 </div>
 
