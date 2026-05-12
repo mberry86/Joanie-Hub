@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPS Model Tool | Joanie Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dl-nav:           #111111;
+    --dl-bg:            #1c1c1c;
+    --dl-card:          #252525;
+    --dl-card-raised:   #2e2e2e;
+    --dl-well:          #383838;
+    --dl-border:        rgba(255,255,255,0.08);
+    --dl-border-md:     rgba(255,255,255,0.15);
+    --dl-text:          #ffffff;
+    --dl-text-2:        #cccccc;
+    --dl-text-3:        #888888;
+    --dl-cyan:          #29b6d8;
+    --dl-cyan-dim:      rgba(41,182,216,0.13);
+    --dl-cyan-border:   rgba(41,182,216,0.35);
+    --dl-green:         #4cdd6a;
+    --dl-green-dim:     rgba(76,221,106,0.12);
+    --dl-green-border:  rgba(76,221,106,0.32);
+    --dl-red:           #ff5555;
+    --dl-red-dim:       rgba(255,85,85,0.12);
+    --dl-red-border:    rgba(255,85,85,0.28);
+    --dl-amber:         #ffb830;
+    --dl-amber-dim:     rgba(255,184,48,0.13);
+    --dl-amber-border:  rgba(255,184,48,0.32);
+    --dl-purple:        #a07eff;
+    --dl-purple-dim:    rgba(160,126,255,0.12);
+    --dl-purple-border: rgba(160,126,255,0.30);
+    --dl-font:      'Inter', sans-serif;
+    --dl-font-disp: 'Barlow Condensed', sans-serif;
+    --dl-font-mono: 'IBM Plex Mono', monospace;
+    --dl-radius:    8px;
+    --dl-radius-lg: 10px;
+    --dl-radius-sm: 4px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 14px; }
+  body { background: var(--dl-bg); color: var(--dl-text); font-family: var(--dl-font); min-height: 100vh; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--dl-well); border-radius: 4px; }
+
+  /* ── TOP NAV ── */
+  .topnav {
+    display: flex; align-items: center; gap: 14px;
+    padding: 0 28px; height: 52px;
+    background: var(--dl-nav); border-bottom: 2px solid var(--dl-cyan);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-logo { width: 32px; height: 32px; border-radius: var(--dl-radius-sm); background: var(--dl-cyan); display: flex; align-items: center; justify-content: center; font-family: var(--dl-font-disp); font-size: 15px; font-weight: 800; color: #111; flex-shrink: 0; }
+  .nav-brand { font-family: var(--dl-font-mono); font-size: 10px; font-weight: 700; color: var(--dl-text-3); letter-spacing: 0.06em; text-transform: uppercase; }
+  .nav-divider { width: 1px; height: 20px; background: var(--dl-cyan-border); flex-shrink: 0; }
+  .nav-title { font-family: var(--dl-font-disp); font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--dl-text); }
+  .nav-subtitle { font-family: var(--dl-font-mono); font-size: 10px; color: var(--dl-text-3); margin-top: 1px; letter-spacing: 0.04em; }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .nav-back { display: flex; align-items: center; gap: 6px; font-family: var(--dl-font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 5px 12px; border-radius: var(--dl-radius-sm); border: 1px solid var(--dl-border-md); color: var(--dl-text-3); transition: all 0.12s; }
+  .nav-back:hover { background: var(--dl-well); color: var(--dl-text-2); }
+
+  /* ── BANNER ── */
+  .live-banner { display: flex; align-items: center; gap: 10px; padding: 9px 28px; background: rgba(76,221,106,0.04); border-bottom: 1px solid var(--dl-green-border); font-family: var(--dl-font-mono); font-size: 10px; color: var(--dl-text-3); letter-spacing: 0.03em; }
+  .live-badge-green { display: flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--dl-green); }
+  .live-badge-green::before { content: '◈'; }
+
+  /* ── MAIN ── */
+  .main { padding: 36px 28px 60px; max-width: 1200px; margin: 0 auto; }
+
+  /* ── PAGE HEADER ── */
+  .page-header { margin-bottom: 32px; padding-bottom: 28px; border-bottom: 1px solid var(--dl-border); }
+  .page-eyebrow { font-family: var(--dl-font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; color: var(--dl-green); margin-bottom: 10px; }
+  .page-title { font-family: var(--dl-font-disp); font-size: 36px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; line-height: 1.1; color: var(--dl-text); margin-bottom: 10px; }
+  .page-title span { color: var(--dl-green); }
+  .page-sub { font-size: 13px; color: var(--dl-text-3); max-width: 600px; line-height: 1.65; margin-bottom: 20px; }
+  .page-actions { display: flex; gap: 10px; align-items: center; }
+
+  /* ── BUTTONS ── */
+  .btn { display: inline-flex; align-items: center; gap: 6px; font-family: var(--dl-font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 8px 18px; border-radius: var(--dl-radius-sm); cursor: pointer; transition: all 0.12s; border: none; }
+  .btn-green { background: var(--dl-green); color: #111; }
+  .btn-green:hover { background: #3ec85e; }
+  .btn-ghost { background: transparent; color: var(--dl-text-3); border: 1px solid var(--dl-border-md); }
+  .btn-ghost:hover { background: var(--dl-well); color: var(--dl-text-2); }
+
+  /* ── SECTION LABELS ── */
+  .section-header { display: flex; align-items: center; margin-bottom: 16px; margin-top: 32px; }
+  .section-label { font-family: var(--dl-font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dl-text-3); display: flex; align-items: center; gap: 10px; width: 100%; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--dl-border); }
+
+  /* ── TABS ── */
+  .tab-bar { display: flex; border-bottom: 1px solid var(--dl-border); margin-bottom: 28px; }
+  .tab-btn { font-family: var(--dl-font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dl-text-3); background: none; border: none; padding: 10px 20px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.12s; }
+  .tab-btn:hover { color: var(--dl-text-2); }
+  .tab-btn.active { color: var(--dl-green); border-bottom-color: var(--dl-green); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── FORM CARDS ── */
+  .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .form-card { background: var(--dl-card); border: 1px solid var(--dl-border); border-radius: var(--dl-radius-lg); overflow: hidden; }
+  .form-card-header { padding: 14px 20px 12px; background: var(--dl-card-raised); border-bottom: 1px solid var(--dl-border); display: flex; align-items: center; gap: 10px; }
+  .form-card-mono { width: 28px; height: 28px; border-radius: var(--dl-radius-sm); display: flex; align-items: center; justify-content: center; font-family: var(--dl-font-disp); font-size: 11px; font-weight: 800; flex-shrink: 0; }
+  .fcm-green  { background: var(--dl-green-dim);  color: var(--dl-green);  border: 1px solid var(--dl-green-border); }
+  .fcm-amber  { background: var(--dl-amber-dim);  color: var(--dl-amber);  border: 1px solid var(--dl-amber-border); }
+  .fcm-cyan   { background: var(--dl-cyan-dim);   color: var(--dl-cyan);   border: 1px solid var(--dl-cyan-border); }
+  .fcm-red    { background: var(--dl-red-dim);    color: var(--dl-red);    border: 1px solid var(--dl-red-border); }
+  .fcm-gray   { background: var(--dl-well);       color: var(--dl-text-3); border: 1px solid var(--dl-border-md); }
+  .form-card-title { font-family: var(--dl-font-disp); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--dl-text); }
+  .form-card-body { padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; }
+
+  /* ── FIELDS ── */
+  .field-label { font-family: var(--dl-font-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dl-text-3); margin-bottom: 5px; }
+  .field-hint { font-size: 11px; color: var(--dl-text-3); margin-top: 4px; line-height: 1.4; }
+
+  input[type="text"], input[type="number"], select, textarea {
+    width: 100%; background: var(--dl-well); border: 1px solid var(--dl-border-md); border-radius: var(--dl-radius-sm);
+    color: var(--dl-text); font-family: var(--dl-font); font-size: 13px; padding: 8px 12px;
+    outline: none; transition: border-color 0.12s; -webkit-appearance: none; appearance: none;
+  }
+  input::placeholder { color: var(--dl-text-3); }
+  input:focus, select:focus, textarea:focus { border-color: var(--dl-green); }
+  input[type="number"] { font-family: var(--dl-font-mono); }
+  select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
+  select option { background: var(--dl-card-raised); }
+  textarea { resize: vertical; min-height: 70px; line-height: 1.5; font-size: 12px; }
+  .input-row { display: flex; align-items: center; }
+  .input-pre, .input-suf { background: var(--dl-card-raised); border: 1px solid var(--dl-border-md); color: var(--dl-text-3); font-family: var(--dl-font-mono); font-size: 11px; padding: 8px 9px; line-height: 1; white-space: nowrap; }
+  .input-pre { border-right: none; border-radius: var(--dl-radius-sm) 0 0 var(--dl-radius-sm); }
+  .input-suf { border-left: none; border-radius: 0 var(--dl-radius-sm) var(--dl-radius-sm) 0; }
+  .input-row input { border-radius: 0; flex: 1; }
+
+  /* ── TIER TABLE ── */
+  .tier-table { width: 100%; border-collapse: collapse; }
+  .tier-table th { font-family: var(--dl-font-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--dl-text-3); text-align: left; padding: 0 14px 10px; }
+  .tier-table td { padding: 9px 14px; border-top: 1px solid var(--dl-border); }
+  .tier-badge { display: inline-block; font-family: var(--dl-font-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: var(--dl-radius-sm); }
+  .tb-bronze { background: rgba(180,120,50,0.15); color: #c8864a; border: 1px solid rgba(180,120,50,0.3); }
+  .tb-silver { background: rgba(180,180,180,0.10); color: #aaa; border: 1px solid rgba(180,180,180,0.22); }
+  .tb-gold   { background: var(--dl-amber-dim); color: var(--dl-amber); border: 1px solid var(--dl-amber-border); }
+  .tb-plat   { background: var(--dl-cyan-dim);  color: var(--dl-cyan);  border: 1px solid var(--dl-cyan-border); }
+  .tier-inline { display: flex; align-items: center; gap: 6px; }
+  .tier-inline span { font-size: 11px; color: var(--dl-text-3); white-space: nowrap; }
+
+  /* ── OUTPUT ── */
+  .output-box { background: var(--dl-nav); border: 1px solid var(--dl-green-border); border-top: 3px solid var(--dl-green); border-radius: var(--dl-radius-lg); padding: 22px 26px; margin-top: 24px; display: none; }
+  .output-box-title { font-family: var(--dl-font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dl-green); margin-bottom: 20px; }
+  .output-kpi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+  .output-kpi-label { font-family: var(--dl-font-mono); font-size: 9px; color: var(--dl-text-3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+  .output-kpi-val { font-family: var(--dl-font-disp); font-size: 28px; font-weight: 800; letter-spacing: 0.5px; line-height: 1; }
+  .ov-green { color: var(--dl-green); } .ov-cyan { color: var(--dl-cyan); } .ov-amber { color: var(--dl-amber); } .ov-red { color: var(--dl-red); } .ov-white { color: var(--dl-text); }
+  .output-divider { height: 1px; background: var(--dl-border); margin: 18px 0; }
+  .output-notes { font-size: 12px; color: var(--dl-text-3); line-height: 1.7; margin-top: 14px; white-space: pre-line; }
+
+  /* ── FORMULA ── */
+  .formula-block { background: var(--dl-nav); border-left: 3px solid var(--dl-cyan); border-radius: 0 var(--dl-radius-sm) var(--dl-radius-sm) 0; padding: 14px 18px; font-family: var(--dl-font-mono); font-size: 11px; color: var(--dl-text-3); line-height: 2.1; }
+  .formula-block .fv { color: var(--dl-cyan); font-weight: 700; }
+  .formula-note { font-size: 11px; color: var(--dl-text-3); line-height: 1.65; margin-top: 10px; }
+
+  /* ── GUARDRAILS ── */
+  .guardrail-item { display: flex; align-items: flex-start; gap: 14px; padding: 18px 0; border-bottom: 1px solid var(--dl-border); }
+  .guardrail-item:last-child { border-bottom: none; }
+  .gr-icon { width: 34px; height: 34px; border-radius: var(--dl-radius-sm); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .gr-red   { background: var(--dl-red-dim);   border: 1px solid var(--dl-red-border); }
+  .gr-amber { background: var(--dl-amber-dim); border: 1px solid var(--dl-amber-border); }
+  .gr-cyan  { background: var(--dl-cyan-dim);  border: 1px solid var(--dl-cyan-border); }
+  .gr-green { background: var(--dl-green-dim); border: 1px solid var(--dl-green-border); }
+  .gr-gray  { background: var(--dl-well);      border: 1px solid var(--dl-border-md); }
+  .gr-body { flex: 1; }
+  .gr-title { font-size: 13px; font-weight: 600; color: var(--dl-text-2); margin-bottom: 3px; }
+  .gr-desc  { font-size: 12px; color: var(--dl-text-3); line-height: 1.6; }
+  .gr-inputs { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .gr-inputs label { font-family: var(--dl-font-mono); font-size: 9px; color: var(--dl-text-3); text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap; }
+  .narrow { max-width: 110px; }
+
+  /* ── ROADMAP ── */
+  .phase-item { display: flex; gap: 16px; padding-bottom: 26px; }
+  .phase-item:last-child { padding-bottom: 0; }
+  .phase-col { display: flex; flex-direction: column; align-items: center; width: 36px; flex-shrink: 0; }
+  .phase-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--dl-font-disp); font-size: 14px; font-weight: 800; }
+  .pn-cyan  { background: var(--dl-cyan-dim);  border: 1px solid var(--dl-cyan-border);  color: var(--dl-cyan); }
+  .pn-amber { background: var(--dl-amber-dim); border: 1px solid var(--dl-amber-border); color: var(--dl-amber); }
+  .pn-gray  { background: var(--dl-well);      border: 1px solid var(--dl-border-md);    color: var(--dl-text-3); }
+  .pn-green { background: var(--dl-green-dim); border: 1px solid var(--dl-green-border); color: var(--dl-green); }
+  .phase-line { flex: 1; width: 1px; background: var(--dl-border); margin-top: 4px; }
+  .phase-item:last-child .phase-line { display: none; }
+  .phase-body { flex: 1; padding-top: 4px; }
+  .phase-title { font-size: 13px; font-weight: 600; color: var(--dl-text); margin-bottom: 4px; }
+  .phase-desc  { font-size: 12px; color: var(--dl-text-3); line-height: 1.6; margin-bottom: 8px; }
+  .phase-chip { display: inline-block; font-family: var(--dl-font-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: var(--dl-radius-sm); margin-right: 6px; }
+  .pc-cyan  { background: var(--dl-cyan-dim);  color: var(--dl-cyan);   border: 1px solid var(--dl-cyan-border); }
+  .pc-amber { background: var(--dl-amber-dim); color: var(--dl-amber);  border: 1px solid var(--dl-amber-border); }
+  .pc-gray  { background: var(--dl-well);      color: var(--dl-text-3); border: 1px solid var(--dl-border-md); }
+  .pc-green { background: var(--dl-green-dim); color: var(--dl-green);  border: 1px solid var(--dl-green-border); }
+  .phase-owner { font-family: var(--dl-font-mono); font-size: 10px; color: var(--dl-text-3); }
+  .phase-fields { display: flex; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
+  .phase-fields .pf { flex: 1; min-width: 160px; }
+
+  /* ── SCORECARD ── */
+  .scorecard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .sc-card { background: var(--dl-card); border: 1px solid var(--dl-border); border-radius: var(--dl-radius); padding: 16px; }
+  .sc-card-title { font-size: 11px; font-weight: 600; margin-bottom: 10px; }
+  .sc-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+  .sc-pill { font-family: var(--dl-font-mono); font-size: 10px; color: var(--dl-text-3); background: var(--dl-well); border: 1px solid var(--dl-border); border-radius: 3px; padding: 3px 7px; }
+
+  /* ── FOOTER ── */
+  .dash-footer { text-align: center; padding: 20px 28px 28px; font-family: var(--dl-font-mono); font-size: 10px; color: var(--dl-text-3); letter-spacing: 0.04em; border-top: 1px solid var(--dl-border); }
+  .dash-footer strong { color: var(--dl-text-2); font-weight: 700; }
+
+  @media (max-width: 900px) {
+    .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; }
+    .output-kpi-grid { grid-template-columns: repeat(2,1fr); }
+    .scorecard-grid { grid-template-columns: 1fr; }
+    .main { padding: 24px 16px 48px; }
+    .topnav { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-logo">J</div>
+  <div class="nav-brand">Centerfield · Health &amp; Medicare</div>
+  <div class="nav-divider"></div>
+  <div>
+    <div class="nav-title">CPS Model Tool</div>
+    <div class="nav-subtitle">Agency Ops &amp; Media · Cost per Sale · Seasonal Graduating Tiers</div>
+  </div>
+  <div class="nav-right">
+    <a href="./index.html" class="nav-back">← Command Center</a>
+  </div>
+</nav>
+
+<div class="live-banner">
+  <span class="live-badge-green">CPS Model Tool</span>
+  <span>·</span>
+  <span>Build seasonal Cost per Sale structures · Graduating tier model · 90-day persistency · CFO guardrails</span>
+</div>
+
+<div class="main">
+
+  <div class="page-header">
+    <div class="page-eyebrow">◈ Agency Ops &amp; Media</div>
+    <h1 class="page-title">Cost per Sale<br><span>Model Builder</span></h1>
+    <p class="page-sub">Configure seasonal CPS structures for media partners. Enter source historicals and unit economics — the model computes base CPS, tier rates, persistency adjustments, and CFO ceiling checks automatically.</p>
+    <div class="page-actions">
+      <button class="btn btn-green" onclick="computeModel()">⚡ Compute Model</button>
+      <button class="btn btn-ghost" onclick="resetForm()">↺ Reset</button>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('model',this)">Model Builder</button>
+    <button class="tab-btn" onclick="switchTab('guardrails',this)">Guardrails</button>
+    <button class="tab-btn" onclick="switchTab('roadmap',this)">Roadmap</button>
+    <button class="tab-btn" onclick="switchTab('tracking',this)">Tracking Scorecard</button>
+  </div>
+
+  <!-- MODEL BUILDER -->
+  <div id="tab-model" class="tab-panel active">
+
+    <div class="section-header"><span class="section-label">Source &amp; season configuration</span></div>
+    <div class="form-grid-2" style="margin-bottom:16px;">
+      <div class="form-card">
+        <div class="form-card-header"><div class="form-card-mono fcm-green">PS</div><div class="form-card-title">Partner / Source Setup</div></div>
+        <div class="form-card-body">
+          <div><div class="field-label">Partner Name</div><input type="text" id="partnerName" placeholder="e.g. MediaSource Alpha"></div>
+          <div><div class="field-label">Season</div><select id="season"><option value="">Select season…</option><option>AEP (Oct – Dec)</option><option>OEP (Jan – Mar)</option><option>SEP (Apr – Sep)</option></select></div>
+          <div><div class="field-label">Marketing Channel</div><select id="channel"><option value="">Select channel…</option><option>Inbound Call</option><option>Digital / Display</option><option>Social</option><option>Email</option><option>Direct Mail</option><option>TV / Radio</option><option>Co-reg / Lead Gen</option></select></div>
+          <div><div class="field-label">Vertical</div><select id="vertical"><option value="">Select vertical…</option><option>Medicare (QM)</option><option>ACA / U65</option><option>Home Services</option><option>Auto Insurance</option></select></div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><div class="form-card-mono fcm-amber">HP</div><div class="form-card-title">Historical Performance</div></div>
+        <div class="form-card-body">
+          <div><div class="field-label">Historical Effectuation Rate (%)</div><div class="input-row"><input type="number" id="histEffRate" placeholder="e.g. 68" min="0" max="100" step="0.1"><span class="input-suf">%</span></div><div class="field-hint">Prior season effectuation rate for this source</div></div>
+          <div><div class="field-label">Historical 90-Day Persistency (%)</div><div class="input-row"><input type="number" id="histPersistency" placeholder="e.g. 72" min="0" max="100" step="0.1"><span class="input-suf">%</span></div><div class="field-hint">Prior season 90-day retention rate for this source</div></div>
+          <div><div class="field-label">Cohort Average 90-Day Persistency (%)</div><div class="input-row"><input type="number" id="cohortPersistency" placeholder="e.g. 75" min="0" max="100" step="0.1"><span class="input-suf">%</span></div><div class="field-hint">Centerfield average across all sources (benchmark)</div></div>
+          <div><div class="field-label">Seasonality Index</div><input type="number" id="seasonIndex" placeholder="e.g. 1.10" min="0.5" max="2.0" step="0.01"><div class="field-hint">Volume multiplier — 1.0 = neutral, 1.1 = +10% lift</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header"><span class="section-label">Unit economics</span></div>
+    <div class="form-grid-3" style="margin-bottom:16px;">
+      <div class="form-card">
+        <div class="form-card-header"><div class="form-card-mono fcm-cyan">LTV</div><div class="form-card-title">Revenue / LTV</div></div>
+        <div class="form-card-body">
+          <div><div class="field-label">Estimated 90-Day LTV ($)</div><div class="input-row"><span class="input-pre">$</span><input type="number" id="ltv90" placeholder="e.g. 420" min="0" step="1"></div></div>
+          <div><div class="field-label">Max CAC % of LTV (CFO-approved)</div><div class="input-row"><input type="number" id="maxCacPct" placeholder="e.g. 35" min="0" max="100" step="0.5"><span class="input-suf">%</span></div><div class="field-hint">Hard ceiling — no tier may exceed this</div></div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><div class="form-card-mono fcm-amber">TGT</div><div class="form-card-title">Seasonal Targets</div></div>
+        <div class="form-card-body">
+          <div><div class="field-label">Seasonal CAC Target ($)</div><div class="input-row"><span class="input-pre">$</span><input type="number" id="cacTarget" placeholder="e.g. 130" min="0" step="1"></div><div class="field-hint">Your internal target CAC for this season</div></div>
+          <div><div class="field-label">Effectuation Rate Target (%)</div><div class="input-row"><input type="number" id="effTarget" placeholder="e.g. 65" min="0" max="100" step="0.1"><span class="input-suf">%</span></div></div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><div class="form-card-mono fcm-green">VOL</div><div class="form-card-title">Volume Parameters</div></div>
+        <div class="form-card-body">
+          <div><div class="field-label">Expected Weekly Volume (Sales)</div><input type="number" id="weeklyVol" placeholder="e.g. 250" min="0" step="1"></div>
+          <div><div class="field-label">Daily Volume Cap (Sales)</div><input type="number" id="dailyCap" placeholder="e.g. 60" min="0" step="1"><div class="field-hint">Max daily sales before auto-pause triggers</div></div>
+          <div><div class="field-label">Min Weekly Floor (Sales)</div><input type="number" id="weeklyFloor" placeholder="e.g. 50" min="0" step="1"><div class="field-hint">Minimum for tier credit eligibility</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header"><span class="section-label">Graduating CPS tier structure</span></div>
+    <div class="form-card" style="margin-bottom:16px;">
+      <div class="form-card-header"><div class="form-card-mono fcm-cyan">T</div><div class="form-card-title">Tier Parameters — effectuation thresholds &amp; CPS uplifts</div></div>
+      <div style="padding:18px 20px;">
+        <table class="tier-table">
+          <thead><tr><th style="width:90px;">Tier</th><th>Eff. rate above target</th><th>CPS uplift to partner</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="tier-badge tb-bronze">Bronze</span></td>
+              <td><div class="tier-inline"><span>≥</span><div class="input-row" style="max-width:110px;"><input type="number" id="t1thresh" value="0" min="0" max="50" step="1"><span class="input-suf">%</span></div><span>above target</span></div></td>
+              <td><div class="input-row" style="max-width:110px;"><input type="number" id="t1uplift" value="0" min="0" max="100" step="1"><span class="input-suf">%</span></div></td>
+              <td style="font-size:11px;color:var(--dl-text-3);">Baseline — floor CPS, no upside</td>
+            </tr>
+            <tr>
+              <td><span class="tier-badge tb-silver">Silver</span></td>
+              <td><div class="tier-inline"><span>≥</span><div class="input-row" style="max-width:110px;"><input type="number" id="t2thresh" value="5" min="0" max="50" step="1"><span class="input-suf">%</span></div><span>above target</span></div></td>
+              <td><div class="input-row" style="max-width:110px;"><input type="number" id="t2uplift" value="8" min="0" max="100" step="1"><span class="input-suf">%</span></div></td>
+              <td style="font-size:11px;color:var(--dl-text-3);">Partner keeps spread over base</td>
+            </tr>
+            <tr>
+              <td><span class="tier-badge tb-gold">Gold</span></td>
+              <td><div class="tier-inline"><span>≥</span><div class="input-row" style="max-width:110px;"><input type="number" id="t3thresh" value="10" min="0" max="50" step="1"><span class="input-suf">%</span></div><span>above target</span></div></td>
+              <td><div class="input-row" style="max-width:110px;"><input type="number" id="t3uplift" value="15" min="0" max="100" step="1"><span class="input-suf">%</span></div></td>
+              <td style="font-size:11px;color:var(--dl-text-3);">Partner keeps spread + bonus</td>
+            </tr>
+            <tr>
+              <td><span class="tier-badge tb-plat">Platinum</span></td>
+              <td><div class="tier-inline"><span>≥</span><div class="input-row" style="max-width:110px;"><input type="number" id="t4thresh" value="15" min="0" max="50" step="1"><span class="input-suf">%</span></div><span>above target</span></div></td>
+              <td><div class="input-row" style="max-width:110px;"><input type="number" id="t4uplift" value="22" min="0" max="100" step="1"><span class="input-suf">%</span></div></td>
+              <td style="font-size:11px;color:var(--dl-text-3);">Max upside — verify vs ceiling</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="outputBox" class="output-box">
+      <div class="output-box-title">⚡ Computed CPS Model Output</div>
+      <div class="output-kpi-grid">
+        <div><div class="output-kpi-label">Base CPS</div><div class="output-kpi-val ov-green" id="out-base">—</div></div>
+        <div><div class="output-kpi-label">Adj. Base CPS (seasonal)</div><div class="output-kpi-val ov-white" id="out-adj">—</div></div>
+        <div><div class="output-kpi-label">Max CPS Ceiling (CFO)</div><div class="output-kpi-val ov-amber" id="out-ceil">—</div></div>
+        <div><div class="output-kpi-label">Ceiling Status</div><div class="output-kpi-val ov-white" id="out-status" style="font-size:16px;margin-top:6px;">—</div></div>
+      </div>
+      <div class="output-divider"></div>
+      <div class="output-kpi-grid">
+        <div><div class="output-kpi-label">Silver CPS</div><div class="output-kpi-val ov-white" id="out-silver" style="font-size:22px;">—</div></div>
+        <div><div class="output-kpi-label">Gold CPS</div><div class="output-kpi-val ov-amber" id="out-gold" style="font-size:22px;">—</div></div>
+        <div><div class="output-kpi-label">Platinum CPS</div><div class="output-kpi-val ov-cyan" id="out-plat" style="font-size:22px;">—</div></div>
+        <div><div class="output-kpi-label">Persistency Adj. Factor</div><div class="output-kpi-val ov-white" id="out-padj" style="font-size:22px;">—</div></div>
+      </div>
+      <div class="output-notes" id="out-notes"></div>
+    </div>
+
+    <div class="section-header" style="margin-top:32px;"><span class="section-label">Formula reference</span></div>
+    <div class="formula-block">
+      <span class="fv">Base CPS</span>        =  Seasonal CAC Target  ÷  Historical Effectuation Rate<br>
+      <span class="fv">Adjusted CPS</span>     =  Base CPS  ×  Seasonality Index  ×  Persistency Adj. Factor<br>
+      <span class="fv">Max CPS Ceiling</span>  =  90-Day LTV  ×  Max CAC % (CFO-approved)<br>
+      <span class="fv">Tier CPS</span>         =  Adjusted Base CPS  ×  ( 1 + Tier Uplift % )<br>
+      <span class="fv">Persistency Adj.</span> =  1.0 if source ≥ cohort avg  ·  0.95 if source lags cohort by &gt; 5%
+    </div>
+    <div class="formula-note">Persistency adjustment applies at next-season reset only. Partners notified 30 days pre-season (preliminary) and 7 days pre-season (final). No retroactive mid-season CPS changes.</div>
+
+  </div>
+
+  <!-- GUARDRAILS -->
+  <div id="tab-guardrails" class="tab-panel">
+    <div class="section-header"><span class="section-label">CFO-facing guardrails &amp; controls</span></div>
+    <div class="form-card" style="margin-bottom:24px;">
+      <div class="form-card-header"><div class="form-card-mono fcm-red">GR</div><div class="form-card-title">Guardrail Configuration — required for CFO sign-off</div></div>
+      <div class="form-card-body">
+        <div class="guardrail-item">
+          <div class="gr-icon gr-red">🔒</div>
+          <div class="gr-body"><div class="gr-title">Hard CAC Ceiling</div><div class="gr-desc">No CPS — including Platinum tier — may exceed the CFO-approved max CAC% of 90-day LTV. Model hard-stops at this line regardless of tier.</div>
+          <div class="gr-inputs"><label>Max CAC %</label><div class="input-row narrow"><input type="number" id="gr-maxcac" placeholder="35" min="0" max="100" step="0.5"><span class="input-suf">%</span></div><span style="font-size:11px;color:var(--dl-text-3);">of 90-day LTV</span></div></div>
+        </div>
+        <div class="guardrail-item">
+          <div class="gr-icon gr-amber">⏸</div>
+          <div class="gr-body"><div class="gr-title">Persistency Lag Protection</div><div class="gr-desc">If a partner's 90-day cohort persistency falls below the floor, a billing credit applies to the next cycle. Structured as credit — not cash clawback — to reduce partner friction.</div>
+          <div class="gr-inputs"><label>Persistency Floor</label><div class="input-row narrow"><input type="number" id="gr-persistfloor" placeholder="65" min="0" max="100" step="1"><span class="input-suf">%</span></div><label>Reconciliation Window</label><div class="input-row narrow"><input type="number" id="gr-reconwindow" placeholder="90" min="30" max="180" step="1"><span class="input-suf">days</span></div></div></div>
+        </div>
+        <div class="guardrail-item">
+          <div class="gr-icon gr-cyan">📊</div>
+          <div class="gr-body"><div class="gr-title">Volume Floor &amp; Daily Cap</div><div class="gr-desc">Minimum weekly volume required for tier credit. Daily cap prevents CAC blowout on high-volume / low-quality surges. Auto-pause triggers at cap breach.</div>
+          <div class="gr-inputs"><label>Weekly Min</label><div class="input-row narrow"><input type="number" id="gr-weeklymin" placeholder="50" min="0" step="5"><span class="input-suf">sales</span></div><label>Daily Cap</label><div class="input-row narrow"><input type="number" id="gr-dailycap" placeholder="60" min="0" step="5"><span class="input-suf">sales</span></div></div></div>
+        </div>
+        <div class="guardrail-item">
+          <div class="gr-icon gr-amber">⚡</div>
+          <div class="gr-body"><div class="gr-title">Quality Circuit Breaker</div><div class="gr-desc">Auto-pause if 7-day rolling effectuation rate drops this % below baseline. Partner must re-qualify before volume restores.</div>
+          <div class="gr-inputs"><label>7-Day Drop Threshold</label><div class="input-row narrow"><input type="number" id="gr-circuit" placeholder="20" min="5" max="50" step="1"><span class="input-suf">% drop</span></div></div></div>
+        </div>
+        <div class="guardrail-item">
+          <div class="gr-icon gr-green">🔄</div>
+          <div class="gr-body"><div class="gr-title">Seasonal Reset Protocol</div><div class="gr-desc">All CPS rates recalibrated at season open using prior-season actuals. No retroactive mid-season changes.</div>
+          <div class="gr-inputs"><label>Preliminary Notice</label><div class="input-row narrow"><input type="number" id="gr-prenotice" value="30" min="7" max="60" step="1"><span class="input-suf">days</span></div><label>Final Notice</label><div class="input-row narrow"><input type="number" id="gr-finalnotice" value="7" min="1" max="30" step="1"><span class="input-suf">days</span></div></div></div>
+        </div>
+        <div class="guardrail-item">
+          <div class="gr-icon gr-gray">📄</div>
+          <div class="gr-body"><div class="gr-title">Reporting &amp; Audit Rights</div><div class="gr-desc">Partner receives weekly CPS performance dashboard. Centerfield retains right to audit attribution and effectuation data. Disputes resolved within agreed window.</div>
+          <div class="gr-inputs"><label>Dispute Resolution</label><div class="input-row narrow"><input type="number" id="gr-dispute" value="15" min="5" max="30" step="1"><span class="input-suf">biz days</span></div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="section-header"><span class="section-label">CFO approval notes</span></div>
+    <div class="form-card">
+      <div class="form-card-header"><div class="form-card-mono fcm-amber">CFO</div><div class="form-card-title">Approval Notes &amp; Stress Test</div></div>
+      <div class="form-card-body">
+        <div><div class="field-label">Key Assumptions &amp; Risks to Disclose</div><textarea id="cfo-notes" placeholder="e.g. CPS model based on prior 2 seasons of source historicals. 90-day persistency structured as billing credit…"></textarea></div>
+        <div><div class="field-label">Scenario Stress Test Notes</div><textarea id="stress-notes" placeholder="e.g. Worst-case: Platinum tier at peak 300 sales/week = $X total CPS spend. Still within approved CAC ceiling…"></textarea></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div id="tab-roadmap" class="tab-panel">
+    <div class="section-header"><span class="section-label">Test rollout roadmap</span></div>
+    <div class="form-card">
+      <div class="form-card-header"><div class="form-card-mono fcm-cyan">RM</div><div class="form-card-title">6-Phase Test Roadmap — CPS Model Pilot</div></div>
+      <div class="form-card-body">
+
+        <div class="phase-item"><div class="phase-col"><div class="phase-num pn-cyan">1</div><div class="phase-line"></div></div><div class="phase-body"><div class="phase-title">Data &amp; Model Build</div><div class="phase-desc">Pull 2–3 seasons of source-level historicals. Calculate effectuation rates, 90-day persistency by cohort, and seasonal CAC actuals. Build CPS model in CFO-reviewable spreadsheet with sensitivity tables.</div><div><span class="phase-chip pc-cyan">Weeks 1–3</span><span class="phase-owner">Owner: Analytics + Media Ops</span></div><div class="phase-fields"><div class="pf"><div class="field-label">Target Completion</div><input type="text" id="r1-date" placeholder="e.g. Week of June 2"></div><div class="pf"><div class="field-label">Owner</div><input type="text" id="r1-owner" placeholder="e.g. Analytics team"></div></div></div></div>
+
+        <div class="phase-item"><div class="phase-col"><div class="phase-num pn-amber">2</div><div class="phase-line"></div></div><div class="phase-body"><div class="phase-title">CFO Review &amp; Approval</div><div class="phase-desc">Present model, unit economics, max CAC ceiling, guardrails, and risk scenarios. Obtain formal sign-off on base CPS range, max CPS cap, clawback methodology, and volume thresholds.</div><div><span class="phase-chip pc-amber">Week 4</span><span class="phase-owner">Owner: VP Agency Ops + CFO</span></div><div class="phase-fields"><div class="pf"><div class="field-label">Meeting Date</div><input type="text" id="r2-date" placeholder="e.g. June 10"></div><div class="pf"><div class="field-label">Pre-meeting Notes</div><input type="text" id="r2-notes" placeholder="e.g. Include finance + legal"></div></div></div></div>
+
+        <div class="phase-item"><div class="phase-col"><div class="phase-num pn-gray">3</div><div class="phase-line"></div></div><div class="phase-body"><div class="phase-title">Partner Selection &amp; Term Sheet</div><div class="phase-desc">Select 2–3 partners with strong historical volume, cooperative data sharing, and existing trust. Draft CPS addendum covering tier structure, credit terms, audit rights, and dispute process.</div><div><span class="phase-chip pc-gray">Weeks 5–6</span><span class="phase-owner">Owner: Media + Legal</span></div><div class="phase-fields"><div class="pf"><div class="field-label">Selected Test Partners</div><input type="text" id="r3-partners" placeholder="e.g. Partner A, Partner B, Partner C"></div></div></div></div>
+
+        <div class="phase-item"><div class="phase-col"><div class="phase-num pn-gray">4</div><div class="phase-line"></div></div><div class="phase-body"><div class="phase-title">Tracking &amp; Dashboard Setup</div><div class="phase-desc">Configure source-level CPS tracking: effectuation tag by source, 90-day persistency cohort tracking, daily volume cap alerts, and tier calculation automation.</div><div><span class="phase-chip pc-gray">Weeks 6–8</span><span class="phase-owner">Owner: Analytics + Tech</span></div><div class="phase-fields"><div class="pf"><div class="field-label">Tracking Tool</div><input type="text" id="r4-tool" placeholder="e.g. Datalot / DugoutIQ"></div></div></div></div>
+
+        <div class="phase-item"><div class="phase-col"><div class="phase-num pn-green">5</div><div class="phase-line"></div></div><div class="phase-body"><div class="phase-title">Test Go-Live (One Season)</div><div class="phase-desc">Launch with 2–3 partners on CPS structure. Run parallel tracking vs. prior model. Weekly performance reviews. Invoke circuit breaker if triggers hit. No tier promotions until week 6 data is clean.</div><div><span class="phase-chip pc-green">Season open → close</span><span class="phase-owner">Owner: Media Ops</span></div><div class="phase-fields"><div class="pf"><div class="field-label">Target Season</div><input type="text" id="r5-season" placeholder="e.g. AEP 2025 (Oct – Dec)"></div></div></div></div>
+
+        <div class="phase-item"><div class="phase-col"><div class="phase-num pn-gray">6</div><div class="phase-line"></div></div><div class="phase-body"><div class="phase-title">90-Day Lookback &amp; Readout</div><div class="phase-desc">At season close + 90 days: reconcile persistency, calculate credits if triggered, compare CPS model CAC vs. prior-model CAC. Build full readout for CFO and present rollout recommendation for all partners / all seasons.</div><div><span class="phase-chip pc-gray">Season close + 90 days</span><span class="phase-owner">Owner: VP Agency Ops + Analytics</span></div></div></div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- TRACKING SCORECARD -->
+  <div id="tab-tracking" class="tab-panel">
+    <div class="section-header"><span class="section-label">Weekly performance tracking scorecard</span></div>
+    <div class="scorecard-grid" style="margin-bottom:24px;">
+      <div class="sc-card"><div class="sc-card-title" style="color:var(--dl-cyan);">Effectuation Metrics</div><div class="sc-pills"><span class="sc-pill">Effectuation rate vs. target</span><span class="sc-pill">7-day rolling trend</span><span class="sc-pill">Volume by day</span><span class="sc-pill">Tier attainment</span><span class="sc-pill">Daily cap utilization %</span></div></div>
+      <div class="sc-card"><div class="sc-card-title" style="color:var(--dl-amber);">Cost Metrics</div><div class="sc-pills"><span class="sc-pill">Actual CPS vs. model CPS</span><span class="sc-pill">Running CAC vs. ceiling</span><span class="sc-pill">Weekly CPS spend pacing</span><span class="sc-pill">Partner tier CPS accrual</span><span class="sc-pill">Total CPS committed</span></div></div>
+      <div class="sc-card"><div class="sc-card-title" style="color:var(--dl-green);">Quality / Persistency</div><div class="sc-pills"><span class="sc-pill">30-day persistency (leading)</span><span class="sc-pill">90-day cohort persistency</span><span class="sc-pill">Source vs. cohort avg</span><span class="sc-pill">Credit exposure</span><span class="sc-pill">Cancellation rate</span></div></div>
+      <div class="sc-card"><div class="sc-card-title" style="color:var(--dl-red);">Model Health</div><div class="sc-pills"><span class="sc-pill">Circuit breaker status</span><span class="sc-pill">Attribution match rate</span><span class="sc-pill">Volume cap utilization</span><span class="sc-pill">Model vs. prior-year CAC</span><span class="sc-pill">Dispute queue</span></div></div>
+    </div>
+    <div class="section-header"><span class="section-label">Partner weekly check-in log</span></div>
+    <div class="form-card">
+      <div class="form-card-header"><div class="form-card-mono fcm-green">LOG</div><div class="form-card-title">Weekly Partner Check-In</div></div>
+      <div class="form-card-body">
+        <div class="form-grid-2">
+          <div><div class="field-label">Partner</div><input type="text" id="log-partner" placeholder="Partner name"></div>
+          <div><div class="field-label">Week of</div><input type="text" id="log-week" placeholder="e.g. June 2"></div>
+        </div>
+        <div class="form-grid-2">
+          <div><div class="field-label">7-Day Effectuation Rate (%)</div><div class="input-row"><input type="number" id="log-eff" placeholder="e.g. 71" min="0" max="100" step="0.1"><span class="input-suf">%</span></div></div>
+          <div><div class="field-label">Current Tier Attained</div><select id="log-tier"><option value="">Select…</option><option>Bronze (baseline)</option><option>Silver</option><option>Gold</option><option>Platinum</option></select></div>
+          <div><div class="field-label">30-Day Persistency (%)</div><div class="input-row"><input type="number" id="log-persist" placeholder="e.g. 74" min="0" max="100" step="0.1"><span class="input-suf">%</span></div></div>
+          <div><div class="field-label">Circuit Breaker Status</div><select id="log-circuit"><option>✅ Active — no issues</option><option>⚠️ Monitoring — near threshold</option><option>🔴 Paused — re-qualification required</option></select></div>
+        </div>
+        <div><div class="field-label">Notes / Action Items</div><textarea id="log-notes" placeholder="e.g. Effectuation trending up. Persistency slightly below cohort avg — monitoring 90-day window…"></textarea></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="dash-footer">
+  <strong>Joanie</strong> · AI-Powered Performance Suite &nbsp;·&nbsp;
+  Centerfield Health &amp; Medicare &nbsp;·&nbsp;
+  <a href="./index.html" style="color:var(--dl-text-3);">← Back to Command Center</a>
+</div>
+
+<script>
+  function switchTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function fmt(n) { return '$' + n.toFixed(2); }
+
+  function computeModel() {
+    const histEff    = parseFloat(document.getElementById('histEffRate').value) / 100;
+    const histPers   = parseFloat(document.getElementById('histPersistency').value) / 100;
+    const cohortPers = parseFloat(document.getElementById('cohortPersistency').value) / 100;
+    const seasonIdx  = parseFloat(document.getElementById('seasonIndex').value) || 1.0;
+    const ltv90      = parseFloat(document.getElementById('ltv90').value);
+    const maxCacPct  = parseFloat(document.getElementById('maxCacPct').value) / 100;
+    const cacTarget  = parseFloat(document.getElementById('cacTarget').value);
+    const t2u = parseFloat(document.getElementById('t2uplift').value) / 100;
+    const t3u = parseFloat(document.getElementById('t3uplift').value) / 100;
+    const t4u = parseFloat(document.getElementById('t4uplift').value) / 100;
+
+    if (!histEff || !cacTarget) {
+      alert('Enter at least Historical Effectuation Rate and Seasonal CAC Target to compute.');
+      return;
+    }
+
+    const baseCps = cacTarget / histEff;
+    let persistAdj = 1.0, persistNote = '';
+    if (histPers && cohortPers) {
+      const lag = cohortPers - histPers;
+      if (lag > 0.05) {
+        persistAdj = 0.95;
+        persistNote = '⚠️ Source 90-day persistency lags cohort by ' + (lag*100).toFixed(1) + '% — persistency adjustment of 0.95 applied to next-season CPS.';
+      } else {
+        persistNote = '✅ Source 90-day persistency within 5% of cohort average — no persistency discount applied.';
+      }
+    }
+
+    const adjCps    = baseCps * seasonIdx * persistAdj;
+    const silverCps = adjCps * (1 + t2u);
+    const goldCps   = adjCps * (1 + t3u);
+    const platCps   = adjCps * (1 + t4u);
+    const ceiling   = (ltv90 && maxCacPct) ? ltv90 * maxCacPct : null;
+
+    document.getElementById('out-base').textContent   = fmt(baseCps);
+    document.getElementById('out-adj').textContent    = fmt(adjCps);
+    document.getElementById('out-ceil').textContent   = ceiling ? fmt(ceiling) : 'N/A';
+    document.getElementById('out-silver').textContent = fmt(silverCps);
+    document.getElementById('out-gold').textContent   = fmt(goldCps);
+    document.getElementById('out-plat').textContent   = fmt(platCps);
+    document.getElementById('out-padj').textContent   = persistAdj.toFixed(2) + 'x';
+
+    const statusEl = document.getElementById('out-status');
+    if (ceiling) {
+      if (platCps > ceiling) { statusEl.textContent = '🔴 Over ceiling'; statusEl.className = 'output-kpi-val ov-red'; }
+      else if (goldCps > ceiling * 0.92) { statusEl.textContent = '⚠️ Near ceiling'; statusEl.className = 'output-kpi-val ov-amber'; }
+      else { statusEl.textContent = '✅ Within ceiling'; statusEl.className = 'output-kpi-val ov-green'; }
+    } else {
+      statusEl.textContent = '— No ceiling set'; statusEl.className = 'output-kpi-val ov-white';
+    }
+
+    let notes = persistNote;
+    if (ceiling && platCps > ceiling) notes += '\n\n🔴 Platinum CPS of ' + fmt(platCps) + ' exceeds CFO ceiling of ' + fmt(ceiling) + '. Reduce tier uplifts or adjust CAC target before CFO presentation.';
+    document.getElementById('out-notes').textContent = notes;
+    const ob = document.getElementById('outputBox');
+    ob.style.display = 'block';
+    ob.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function resetForm() {
+    if (!confirm('Reset all fields?')) return;
+    const keep = ['t1thresh','t2thresh','t3thresh','t4thresh','t1uplift','t2uplift','t3uplift','t4uplift','gr-prenotice','gr-finalnotice','gr-dispute'];
+    document.querySelectorAll('input[type="text"], input[type="number"], textarea').forEach(el => { if (!keep.includes(el.id)) el.value = ''; });
+    document.getElementById('outputBox').style.display = 'none';
+  }
+</script>
+</body>
+</html>
