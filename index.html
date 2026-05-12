@@ -6,55 +6,68 @@
 <title>Joanie Command Center | Centerfield Health &amp; Medicare</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy: #0A1628;
-    --navy-mid: #0D1E38;
-    --navy-card: #0f1f3a;
-    --navy-border: rgba(255,255,255,0.07);
-    --navy-border-med: rgba(255,255,255,0.12);
-    --teal: #1D9E75;
-    --teal-light: #5DCAA5;
-    --teal-dim: rgba(29,158,117,0.15);
-    --gold: #BA7517;
-    --gold-light: #EF9F27;
-    --gold-dim: rgba(186,117,23,0.15);
-    --white: #ffffff;
-    --white-70: rgba(255,255,255,0.7);
-    --white-40: rgba(255,255,255,0.4);
-    --white-15: rgba(255,255,255,0.15);
-    --white-08: rgba(255,255,255,0.08);
-    --red: #E24B4A;
-    --blue: #378ADD;
-    --amber: #EF9F27;
-    --purple: #7F77DD;
-    --purple-dim: rgba(127,119,221,0.15);
-    --font: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-display: 'Space Grotesk', 'DM Sans', sans-serif;
+    --dl-nav:           #111111;
+    --dl-bg:            #1c1c1c;
+    --dl-card:          #252525;
+    --dl-card-raised:   #2e2e2e;
+    --dl-well:          #383838;
+    --dl-border:        rgba(255,255,255,0.08);
+    --dl-border-md:     rgba(255,255,255,0.15);
+    --dl-text:          #ffffff;
+    --dl-text-2:        #cccccc;
+    --dl-text-3:        #888888;
+    --dl-cyan:          #29b6d8;
+    --dl-cyan-dim:      rgba(41,182,216,0.13);
+    --dl-cyan-border:   rgba(41,182,216,0.35);
+    --dl-green:         #4cdd6a;
+    --dl-green-dim:     rgba(76,221,106,0.12);
+    --dl-green-border:  rgba(76,221,106,0.32);
+    --dl-red:           #ff5555;
+    --dl-amber:         #ffb830;
+    --dl-amber-dim:     rgba(255,184,48,0.13);
+    --dl-amber-border:  rgba(255,184,48,0.32);
+    --dl-purple:        #a07eff;
+    --dl-purple-dim:    rgba(160,126,255,0.12);
+    --dl-purple-border: rgba(160,126,255,0.30);
+    --dl-font:      'Inter', sans-serif;
+    --dl-font-disp: 'Barlow Condensed', sans-serif;
+    --dl-font-mono: 'IBM Plex Mono', monospace;
+    --dl-radius:    8px;
+    --dl-radius-lg: 10px;
+    --dl-radius-sm: 4px;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { font-size: 14px; }
 
   body {
-    background: var(--navy);
-    color: var(--white);
-    font-family: var(--font);
+    background: var(--dl-bg);
+    color: var(--dl-text);
+    font-family: var(--dl-font);
     min-height: 100vh;
-    line-height: 1.5;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   a { color: inherit; text-decoration: none; }
 
+  ::-webkit-scrollbar       { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--dl-well); border-radius: 4px; }
+
+  /* ── TOP NAV ── */
   .topnav {
     display: flex;
     align-items: center;
     gap: 14px;
     padding: 0 28px;
     height: 52px;
-    background: var(--navy-mid);
-    border-bottom: 1px solid var(--navy-border);
+    background: var(--dl-nav);
+    border-bottom: 2px solid var(--dl-cyan);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -62,177 +75,309 @@
 
   .nav-logo {
     width: 32px; height: 32px;
-    border-radius: 8px;
-    background: var(--teal);
+    border-radius: var(--dl-radius-sm);
+    background: var(--dl-cyan);
     display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 700; letter-spacing: -0.5px;
-    color: #fff; flex-shrink: 0;
-    font-family: var(--font-display);
+    font-family: var(--dl-font-disp);
+    font-size: 15px; font-weight: 800;
+    color: #111; flex-shrink: 0;
   }
 
-  .nav-brand { font-size: 11px; color: var(--white-40); letter-spacing: 0.04em; text-transform: uppercase; }
-  .nav-divider { width: 1px; height: 20px; background: var(--navy-border-med); flex-shrink: 0; }
-  .nav-title { font-size: 13px; font-weight: 600; color: var(--white-70); font-family: var(--font-display); }
-  .nav-subtitle { font-size: 11px; color: var(--white-40); }
+  .nav-brand {
+    font-family: var(--dl-font-mono);
+    font-size: 10px; font-weight: 700;
+    color: var(--dl-text-3);
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .nav-divider  { width: 1px; height: 20px; background: var(--dl-cyan-border); flex-shrink: 0; }
+  .nav-title    {
+    font-family: var(--dl-font-disp);
+    font-size: 15px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+    color: var(--dl-text);
+  }
+  .nav-subtitle {
+    font-family: var(--dl-font-mono);
+    font-size: 10px; color: var(--dl-text-3);
+    margin-top: 1px; letter-spacing: 0.04em;
+  }
   .nav-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 
   .live-pill {
     display: flex; align-items: center; gap: 6px;
-    font-size: 11px; font-weight: 600;
-    padding: 4px 12px; border-radius: 7px;
-    border: 1px solid rgba(29,158,117,0.3);
-    background: rgba(29,158,117,0.1);
-    color: var(--teal-light);
+    font-family: var(--dl-font-mono);
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 4px 12px; border-radius: var(--dl-radius-sm);
+    border: 1px solid var(--dl-cyan-border);
+    background: var(--dl-cyan-dim);
+    color: var(--dl-cyan);
   }
 
   .live-dot {
     width: 6px; height: 6px; border-radius: 50%;
-    background: var(--teal); box-shadow: 0 0 0 2px var(--teal-dim);
-    animation: pulse 2s infinite;
+    background: var(--dl-cyan);
+    box-shadow: 0 0 0 2px var(--dl-cyan-dim);
+    animation: dl-pulse 2s infinite;
   }
 
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  @keyframes dl-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
 
+  /* ── LIVE BANNER ── */
   .live-banner {
     display: flex; align-items: center; gap: 10px;
     padding: 9px 28px;
-    background: rgba(29,158,117,0.07);
-    border-bottom: 1px solid rgba(29,158,117,0.15);
-    font-size: 11px; color: var(--white-40);
+    background: rgba(41,182,216,0.05);
+    border-bottom: 1px solid var(--dl-cyan-border);
+    font-family: var(--dl-font-mono);
+    font-size: 10px; color: var(--dl-text-3);
+    letter-spacing: 0.03em;
   }
 
   .live-badge {
     display: flex; align-items: center; gap: 5px;
-    font-size: 11px; font-weight: 600;
-    color: var(--teal-light); letter-spacing: 0.02em;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.07em; text-transform: uppercase;
+    color: var(--dl-cyan);
   }
   .live-badge::before { content: '◈'; font-size: 10px; }
 
   .banner-links { display: flex; gap: 12px; margin-left: 8px; }
-  .banner-link { font-size: 11px; color: var(--teal-light); font-weight: 500; opacity: 0.8; transition: opacity 0.12s; }
+  .banner-link  {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--dl-cyan); opacity: 0.75; transition: opacity 0.12s;
+  }
   .banner-link:hover { opacity: 1; }
 
+  /* ── MAIN ── */
   .main { padding: 36px 28px 60px; max-width: 1200px; margin: 0 auto; }
 
-  .hero { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--navy-border); }
-  .hero-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal-light); margin-bottom: 10px; }
-
-  .hero-title {
-    font-size: 32px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.15;
-    color: var(--white); font-family: var(--font-display); margin-bottom: 12px;
+  /* ── HERO ── */
+  .hero {
+    margin-bottom: 40px; padding-bottom: 32px;
+    border-bottom: 1px solid var(--dl-border);
   }
-  .hero-title span { color: var(--teal-light); }
-  .hero-sub { font-size: 13px; color: var(--white-40); max-width: 580px; line-height: 1.6; }
+  .hero-eyebrow {
+    font-family: var(--dl-font-mono);
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.10em; text-transform: uppercase;
+    color: var(--dl-cyan); margin-bottom: 10px;
+  }
+  .hero-title {
+    font-family: var(--dl-font-disp);
+    font-size: 40px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 1px;
+    line-height: 1.1; color: var(--dl-text);
+    margin-bottom: 12px;
+  }
+  .hero-title span { color: var(--dl-cyan); }
+  .hero-sub {
+    font-size: 13px; color: var(--dl-text-3);
+    max-width: 580px; line-height: 1.65;
+  }
 
-  .hero-stats { display: flex; gap: 32px; margin-top: 24px; }
-  .hstat { display: flex; flex-direction: column; gap: 2px; }
-  .hstat-val { font-size: 22px; font-weight: 700; color: var(--white); font-family: var(--font-display); letter-spacing: -0.5px; }
-  .hstat-val.teal { color: var(--teal-light); }
-  .hstat-val.gold { color: var(--gold-light); }
-  .hstat-label { font-size: 10px; color: var(--white-40); text-transform: uppercase; letter-spacing: 0.06em; }
 
-  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-  .section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--white-40); }
 
-  .dash-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 40px; }
+  /* ── SECTION HEADERS ── */
+  .section-header { display: flex; align-items: center; margin-bottom: 16px; }
+  .section-label {
+    font-family: var(--dl-font-mono);
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--dl-text-3);
+    display: flex; align-items: center; gap: 10px; width: 100%;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--dl-border); }
+
+  /* ── DASH GRID ── */
+  .dash-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px; margin-bottom: 40px;
+  }
 
   .dash-card {
-    background: var(--navy-card); border: 1px solid var(--navy-border);
-    border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;
+    background: var(--dl-card);
+    border: 1px solid var(--dl-border);
+    border-radius: var(--dl-radius-lg);
+    overflow: hidden; display: flex; flex-direction: column;
     transition: border-color 0.15s, transform 0.15s;
   }
-  .dash-card:hover { border-color: var(--navy-border-med); transform: translateY(-2px); }
+  .dash-card:hover { border-color: var(--dl-border-md); transform: translateY(-2px); }
 
   .dash-card-accent { height: 3px; width: 100%; }
-  .accent-teal { background: linear-gradient(90deg, var(--teal), var(--teal-light)); }
-  .accent-gold { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
-  .accent-purple { background: linear-gradient(90deg, #534AB7, var(--purple)); }
+  .accent-teal   { background: var(--dl-cyan); }
+  .accent-gold   { background: var(--dl-amber); }
+  .accent-purple { background: var(--dl-purple); }
+  .accent-cyan   { background: var(--dl-cyan); }
 
   .dash-card-body { padding: 20px 22px; flex: 1; display: flex; flex-direction: column; }
   .dash-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
 
   .dash-monogram {
-    width: 38px; height: 38px; border-radius: 9px;
+    width: 38px; height: 38px;
+    border-radius: var(--dl-radius-sm);
     display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 700; font-family: var(--font-display);
-    letter-spacing: -0.5px; flex-shrink: 0;
+    font-family: var(--dl-font-disp);
+    font-size: 14px; font-weight: 800; letter-spacing: 0.5px;
+    flex-shrink: 0;
   }
-  .mono-teal { background: rgba(29,158,117,0.2); color: var(--teal-light); border: 1px solid rgba(29,158,117,0.3); }
-  .mono-gold { background: rgba(186,117,23,0.2); color: var(--gold-light); border: 1px solid rgba(186,117,23,0.3); }
-  .mono-purple { background: rgba(127,119,221,0.2); color: #AFA9EC; border: 1px solid rgba(127,119,221,0.3); }
+  .mono-teal   { background: var(--dl-cyan-dim);   color: var(--dl-cyan);   border: 1px solid var(--dl-cyan-border); }
+  .mono-gold   { background: var(--dl-amber-dim);  color: var(--dl-amber);  border: 1px solid var(--dl-amber-border); }
+  .mono-purple { background: var(--dl-purple-dim); color: var(--dl-purple); border: 1px solid var(--dl-purple-border); }
+  .mono-cyan   { background: var(--dl-cyan-dim);   color: var(--dl-cyan);   border: 1px solid var(--dl-cyan-border); }
 
-  .status-badge { display: flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.02em; }
-  .status-live { background: rgba(29,158,117,0.15); color: var(--teal-light); border: 1px solid rgba(29,158,117,0.25); }
-  .status-live::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--teal); display: block; animation: pulse 2s infinite; }
+  .status-badge {
+    display: flex; align-items: center; gap: 5px;
+    font-family: var(--dl-font-mono);
+    font-size: 9px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: var(--dl-radius-sm);
+  }
+  .status-live {
+    background: var(--dl-cyan-dim);
+    color: var(--dl-cyan);
+    border: 1px solid var(--dl-cyan-border);
+  }
+  .status-live::before {
+    content: '';
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--dl-cyan); display: block;
+    animation: dl-pulse 2s infinite;
+  }
 
-  .dash-card-title { font-size: 15px; font-weight: 700; color: var(--white); font-family: var(--font-display); margin-bottom: 6px; line-height: 1.2; }
-  .dash-card-desc { font-size: 11px; color: var(--white-40); line-height: 1.6; flex: 1; margin-bottom: 16px; }
+  .dash-card-title {
+    font-family: var(--dl-font-disp);
+    font-size: 16px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--dl-text); margin-bottom: 8px; line-height: 1.2;
+  }
+  .dash-card-desc { font-size: 12px; color: var(--dl-text-3); line-height: 1.65; flex: 1; margin-bottom: 16px; }
 
   .dash-kpi-row {
     display: flex; gap: 12px; margin-bottom: 18px;
-    padding: 10px 12px; background: var(--white-08);
-    border-radius: 8px; border: 1px solid var(--navy-border);
+    padding: 10px 12px;
+    background: var(--dl-well);
+    border-radius: var(--dl-radius-sm);
+    border: 1px solid var(--dl-border);
   }
-  .dash-kpi { flex: 1; display: flex; flex-direction: column; gap: 2px; }
-  .dash-kpi-val { font-size: 14px; font-weight: 700; font-family: var(--font-display); }
-  .kv-teal { color: var(--teal-light); }
-  .kv-gold { color: var(--gold-light); }
-  .kv-purple { color: #AFA9EC; }
-  .dash-kpi-label { font-size: 9px; color: var(--white-40); text-transform: uppercase; letter-spacing: 0.05em; }
+  .dash-kpi { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .dash-kpi-val {
+    font-family: var(--dl-font-disp);
+    font-size: 16px; font-weight: 700; letter-spacing: 0.5px;
+  }
+  .kv-teal   { color: var(--dl-cyan); }
+  .kv-gold   { color: var(--dl-amber); }
+  .kv-purple { color: var(--dl-purple); }
+  .kv-cyan   { color: var(--dl-cyan); }
+  .dash-kpi-label {
+    font-family: var(--dl-font-mono);
+    font-size: 9px; color: var(--dl-text-3);
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
 
   .dash-card-footer {
-    display: flex; gap: 8px; padding: 14px 22px;
-    border-top: 1px solid var(--navy-border); background: rgba(255,255,255,0.02);
+    display: flex; gap: 8px; padding: 12px 22px;
+    border-top: 1px solid var(--dl-border);
+    background: var(--dl-card-raised);
   }
 
   .open-btn {
     display: flex; align-items: center; gap: 6px;
-    font-size: 12px; font-weight: 600; padding: 7px 16px;
-    border-radius: 7px; cursor: pointer; transition: all 0.12s;
-    letter-spacing: 0.01em; text-decoration: none;
-    flex: 1; justify-content: center;
+    font-family: var(--dl-font-mono);
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 7px 16px; border-radius: var(--dl-radius-sm);
+    cursor: pointer; transition: all 0.12s;
+    text-decoration: none; flex: 1; justify-content: center;
   }
-  .open-btn-primary { background: var(--teal); color: #fff; border: 1px solid var(--teal); }
-  .open-btn-primary:hover { background: #23b885; }
-  .open-btn-primary.gold-btn { background: var(--gold); border-color: var(--gold); }
-  .open-btn-primary.gold-btn:hover { background: #cc8319; }
-  .open-btn-primary.purple-btn { background: #534AB7; border-color: #534AB7; }
+  .open-btn-primary          { background: var(--dl-cyan);   color: #111; border: 1px solid var(--dl-cyan); }
+  .open-btn-primary:hover    { background: #22a0c2; border-color: #22a0c2; }
+  .gold-btn                  { background: var(--dl-amber);  color: #111; border-color: var(--dl-amber); }
+  .gold-btn:hover            { background: #e0a428; border-color: #e0a428; }
+  .purple-btn                { background: var(--dl-purple); color: #111; border-color: var(--dl-purple); }
+  .purple-btn:hover          { background: #8c6ef0; border-color: #8c6ef0; }
+  .cyan-btn                  { background: var(--dl-cyan);   color: #111; border-color: var(--dl-cyan); }
+  .cyan-btn:hover            { background: #22a0c2; border-color: #22a0c2; }
+  .open-btn-secondary {
+    background: transparent; color: var(--dl-text-3);
+    border: 1px solid var(--dl-border-md);
+    flex: 0; padding: 7px 12px;
+  }
+  .open-btn-secondary:hover  { background: var(--dl-well); color: var(--dl-text-2); }
 
-  .accent-cyan { background: linear-gradient(90deg, #1a8fa8, #29b6d8); }
-  .mono-cyan { background: rgba(41,182,216,0.18); color: #29b6d8; border: 1px solid rgba(41,182,216,0.35); }
-  .kv-cyan { color: #29b6d8; }
-  .open-btn-primary.cyan-btn { background: #29b6d8; border-color: #29b6d8; color: #111; }
-  .open-btn-primary.cyan-btn:hover { background: #22a0c2; border-color: #22a0c2; }
-  .open-btn-primary.purple-btn:hover { background: #6059c9; }
-  .open-btn-secondary { background: var(--white-08); color: var(--white-40); border: 1px solid var(--navy-border-med); flex: 0; padding: 7px 12px; }
-  .open-btn-secondary:hover { background: var(--white-15); color: var(--white-70); }
-
-  .resources-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin-bottom: 40px; }
+  /* ── RESOURCES GRID ── */
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 10px; margin-bottom: 40px;
+  }
 
   .resource-card {
-    background: var(--navy-card); border: 1px solid var(--navy-border);
-    border-radius: 10px; padding: 14px 16px;
+    background: var(--dl-card);
+    border: 1px solid var(--dl-border);
+    border-radius: var(--dl-radius);
+    padding: 14px 16px;
     display: flex; align-items: center; gap: 12px;
-    transition: border-color 0.12s; cursor: pointer; text-decoration: none;
+    transition: border-color 0.12s, background 0.12s;
+    cursor: pointer; text-decoration: none;
   }
-  .resource-card:hover { border-color: var(--navy-border-med); }
-  .resource-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--white-08); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
-  .resource-name { font-size: 12px; font-weight: 600; color: var(--white-70); margin-bottom: 2px; }
-  .resource-type { font-size: 10px; color: var(--white-40); }
-  .resource-arrow { margin-left: auto; font-size: 12px; color: var(--white-40); flex-shrink: 0; }
+  .resource-card:hover { border-color: var(--dl-cyan-border); background: var(--dl-cyan-dim); }
+  .resource-icon {
+    width: 32px; height: 32px; border-radius: var(--dl-radius-sm);
+    background: var(--dl-well);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .resource-name  { font-size: 12px; font-weight: 600; color: var(--dl-text-2); margin-bottom: 2px; }
+  .resource-type  { font-family: var(--dl-font-mono); font-size: 10px; color: var(--dl-text-3); }
+  .resource-arrow { margin-left: auto; font-size: 12px; color: var(--dl-text-3); flex-shrink: 0; }
 
-  .how-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin-bottom: 40px; }
-  .how-card { background: var(--navy-card); border: 1px solid var(--navy-border); border-radius: 10px; padding: 16px; }
-  .how-num { font-size: 11px; font-weight: 700; color: var(--teal-light); font-family: var(--font-display); margin-bottom: 8px; letter-spacing: 0.05em; }
-  .how-title { font-size: 12px; font-weight: 600; color: var(--white-70); margin-bottom: 6px; }
-  .how-desc { font-size: 11px; color: var(--white-40); line-height: 1.55; }
+  /* ── HOW GRID ── */
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 12px; margin-bottom: 40px;
+  }
+  .how-card {
+    background: var(--dl-card);
+    border: 1px solid var(--dl-border);
+    border-top: 2px solid var(--dl-cyan);
+    border-radius: var(--dl-radius); padding: 16px;
+  }
+  .how-num {
+    font-family: var(--dl-font-mono);
+    font-size: 10px; font-weight: 700;
+    color: var(--dl-cyan); margin-bottom: 8px; letter-spacing: 0.08em;
+  }
+  .how-title { font-size: 12px; font-weight: 600; color: var(--dl-text-2); margin-bottom: 6px; }
+  .how-desc  { font-size: 11px; color: var(--dl-text-3); line-height: 1.6; }
 
+  /* ── FOOTER ── */
   .dash-footer {
     text-align: center; padding: 20px 28px 28px;
-    font-size: 10px; color: var(--white-40); letter-spacing: 0.03em;
-    border-top: 1px solid var(--navy-border);
+    font-family: var(--dl-font-mono);
+    font-size: 10px; color: var(--dl-text-3);
+    letter-spacing: 0.04em;
+    border-top: 1px solid var(--dl-border);
   }
-  .dash-footer strong { color: var(--white-70); font-weight: 600; }
+  .dash-footer strong { color: var(--dl-text-2); font-weight: 700; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .dash-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .how-grid  { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  }
+  @media (max-width: 640px) {
+    .dash-grid      { grid-template-columns: 1fr; }
+    .resources-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .how-grid       { grid-template-columns: 1fr; }
+    .hero-title     { font-size: 26px; }
+    .hero-stats     { gap: 20px; flex-wrap: wrap; }
+    .main           { padding: 24px 16px 48px; }
+    .topnav         { padding: 0 16px; }
+  }
 </style>
 </head>
 <body>
@@ -248,15 +393,15 @@
   <div class="nav-right">
     <div class="live-pill">
       <div class="live-dot"></div>
-      3 Dashboards Live
+      6 Dashboards Live
     </div>
   </div>
 </nav>
 
 <div class="live-banner">
   <span class="live-badge">Joanie Intelligence Suite</span>
-  <span style="color:var(--white-40)">·</span>
-  <span style="color:var(--white-40)">All dashboards backed by live Notion databases · Centerfield Health &amp; Medicare</span>
+  <span>·</span>
+  <span>All dashboards backed by live Notion databases · Centerfield Health &amp; Medicare</span>
   <div class="banner-links">
     <a href="https://www.notion.so/337cb15b39018030aa3ef853242aa527" target="_blank" class="banner-link">Joanie Reporting Hub</a>
     <a href="https://www.notion.so/342cb15b390181b6bd7fde262bf69998" target="_blank" class="banner-link">BD Hub</a>
@@ -269,14 +414,9 @@
 
   <div class="hero">
     <div class="hero-eyebrow">◈ Joanie Intelligence Suite</div>
-    <h1 class="hero-title">Your AI-powered<br><span>performance command center</span></h1>
+    <h1 class="hero-title">Your AI-empowered<br><span>performance command center</span></h1>
     <p class="hero-sub">All Joanie dashboards in one place. Built for Centerfield Health &amp; Medicare to supercharge QM media performance, right pricing, and BD development — all connected to live Notion data.</p>
-    <div class="hero-stats">
-      <div class="hstat"><span class="hstat-val teal">3</span><span class="hstat-label">Live dashboards</span></div>
-      <div class="hstat"><span class="hstat-val">51</span><span class="hstat-label">Publisher records</span></div>
-      <div class="hstat"><span class="hstat-val gold">$9.1M</span><span class="hstat-label">Est. pipeline rev</span></div>
-      <div class="hstat"><span class="hstat-val teal">◈</span><span class="hstat-label">Notion connected</span></div>
-    </div>
+
   </div>
 
   <div class="section-header">
@@ -318,7 +458,7 @@
         <div class="dash-kpi-row">
           <div class="dash-kpi"><span class="dash-kpi-val kv-gold">17</span><span class="dash-kpi-label">Publishers</span></div>
           <div class="dash-kpi"><span class="dash-kpi-val kv-gold">3</span><span class="dash-kpi-label">Seasons</span></div>
-          <div class="dash-kpi"><span class="dash-kpi-val kv-gold">$325</span><span class="dash-kpi-label">Target CPA</span></div>
+          <div class="dash-kpi"><span class="dash-kpi-val kv-gold">$400</span><span class="dash-kpi-label">Target CPA</span></div>
         </div>
       </div>
       <div class="dash-card-footer">
@@ -347,6 +487,7 @@
         <a href="https://www.notion.so/342cb15b390181b6bd7fde262bf69998" target="_blank" class="open-btn open-btn-secondary" title="Open in Notion">◈</a>
       </div>
     </div>
+
     <div class="dash-card">
       <div class="dash-card-accent accent-cyan"></div>
       <div class="dash-card-body">
@@ -355,7 +496,7 @@
           <span class="status-badge status-live">Live · SEP</span>
         </div>
         <div class="dash-card-title">API / RevShare<br>Mix Optimizer</div>
-        <div class="dash-card-desc">Joanie Predicts intraday API vs RevShare routing optimizer. Break-even answer rate modeling, hourly P&L by mix, and optimal split recommendations for Media Match and QM Marketplace.</div>
+        <div class="dash-card-desc">Joanie Predicts intraday API vs RevShare routing optimizer. Break-even answer rate modeling, hourly P&amp;L by mix, and optimal split recommendations for Media Match and QM Marketplace.</div>
         <div class="dash-kpi-row">
           <div class="dash-kpi"><span class="dash-kpi-val kv-cyan">24hr</span><span class="dash-kpi-label">Intraday</span></div>
           <div class="dash-kpi"><span class="dash-kpi-val kv-cyan">Joanie</span><span class="dash-kpi-label">Predicts</span></div>
@@ -365,6 +506,48 @@
       <div class="dash-card-footer">
         <a href="https://api-revshare-optimizer.vercel.app" target="_blank" class="open-btn open-btn-primary cyan-btn">Open dashboard →</a>
         <a href="https://www.notion.so/7b3a3e80baac4f3ca3ac780ef3ab506c" target="_blank" class="open-btn open-btn-secondary" title="Open in Notion">◈</a>
+      </div>
+    </div>
+
+    <div class="dash-card">
+      <div class="dash-card-accent accent-teal"></div>
+      <div class="dash-card-body">
+        <div class="dash-card-header">
+          <div class="dash-monogram mono-teal">PA</div>
+          <span class="status-badge status-live">Live · SEP</span>
+        </div>
+        <div class="dash-card-title">Ping Analytics &amp;<br>Bid Optimization</div>
+        <div class="dash-card-desc">QM source-level bid performance intelligence across 25 active sources. Bid rate analysis, win rate optimization, suppression opportunities, and RP Agent foundation — built on 1.96M monthly pings.</div>
+        <div class="dash-kpi-row">
+          <div class="dash-kpi"><span class="dash-kpi-val kv-teal">1.96M</span><span class="dash-kpi-label">Total pings</span></div>
+          <div class="dash-kpi"><span class="dash-kpi-val kv-teal">13.9%</span><span class="dash-kpi-label">Bid rate</span></div>
+          <div class="dash-kpi"><span class="dash-kpi-val kv-teal">$2.26M</span><span class="dash-kpi-label">Total GP</span></div>
+        </div>
+      </div>
+      <div class="dash-card-footer">
+        <a href="https://media-match-dashboard.vercel.app/ping-analytics" target="_blank" class="open-btn open-btn-primary">Open dashboard →</a>
+        <a href="https://www.notion.so/337cb15b39018030aa3ef853242aa527" target="_blank" class="open-btn open-btn-secondary" title="Open in Notion">◈</a>
+      </div>
+    </div>
+
+    <div class="dash-card">
+      <div class="dash-card-accent accent-gold"></div>
+      <div class="dash-card-body">
+        <div class="dash-card-header">
+          <div class="dash-monogram mono-gold">MX</div>
+          <span class="status-badge status-live">Live · SEP</span>
+        </div>
+        <div class="dash-card-title">QM SEP Media Mix<br>Optimizer</div>
+        <div class="dash-card-desc">Prescribes the optimal publisher allocation for 125 agents to maximize GP/TH while controlling CPA. GP/TH vs floor modeling, scenario simulation, and daily allocation guidance by source.</div>
+        <div class="dash-kpi-row">
+          <div class="dash-kpi"><span class="dash-kpi-val kv-gold">125</span><span class="dash-kpi-label">Agent cap</span></div>
+          <div class="dash-kpi"><span class="dash-kpi-val kv-gold">28</span><span class="dash-kpi-label">Publishers</span></div>
+          <div class="dash-kpi"><span class="dash-kpi-val kv-gold">$400</span><span class="dash-kpi-label">Target CPA</span></div>
+        </div>
+      </div>
+      <div class="dash-card-footer">
+        <a href="https://qm-sep-optimizer.vercel.app/" target="_blank" class="open-btn open-btn-primary gold-btn">Open dashboard →</a>
+        <a href="https://www.notion.so/a64a0fd07f5b4aa18b12639b8bf7a87d" target="_blank" class="open-btn open-btn-secondary" title="Open in Notion">◈</a>
       </div>
     </div>
 
@@ -410,10 +593,10 @@
       <div><div class="resource-name">Joanie Operating Guide</div><div class="resource-type">Notion · Workflow documentation</div></div>
       <span class="resource-arrow">↗</span>
     </a>
-    <a href="./joanie-hub-sop.html" target="_blank" class="resource-card" style="border-color:rgba(41,182,216,0.25);background:rgba(41,182,216,0.05);">
-      <div class="resource-icon" style="background:rgba(41,182,216,0.15);">📋</div>
-      <div><div class="resource-name" style="color:#5DCAA5;">RP Dashboard Weekly SOP</div><div class="resource-type">How to run MPQS + Right Pricing updates · Team guide</div></div>
-      <span class="resource-arrow" style="color:#5DCAA5;">↗</span>
+    <a href="./joanie-hub-sop.html" target="_blank" class="resource-card" style="border-color:var(--dl-cyan-border);background:var(--dl-cyan-dim);">
+      <div class="resource-icon" style="background:rgba(41,182,216,0.2);">📋</div>
+      <div><div class="resource-name" style="color:var(--dl-cyan);">RP Dashboard Weekly SOP</div><div class="resource-type">How to run MPQS + Right Pricing updates · Team guide</div></div>
+      <span class="resource-arrow" style="color:var(--dl-cyan);">↗</span>
     </a>
   </div>
 
