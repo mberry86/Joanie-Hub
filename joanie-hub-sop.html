@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QM Right Pricing Dashboard — Weekly Update SOP | Joanie Reporting Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Barlow+Condensed:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #111418;
+  --surface:   #1a1e24;
+  --surface2:  #22272f;
+  --surface3:  #2a3040;
+  --border:    rgba(255,255,255,0.07);
+  --border2:   rgba(255,255,255,0.13);
+  --teal:      #29b6d8;
+  --teal-dim:  rgba(41,182,216,0.12);
+  --teal-glow: rgba(41,182,216,0.22);
+  --gold:      #ffb830;
+  --gold-dim:  rgba(255,184,48,0.12);
+  --red:       #ff5555;
+  --red-dim:   rgba(255,85,85,0.10);
+  --green:     #3dd68c;
+  --green-dim: rgba(61,214,140,0.10);
+  --amber:     #ffb347;
+  --purple:    #a07eff;
+  --white:     #ffffff;
+  --w80:       rgba(255,255,255,0.80);
+  --w60:       rgba(255,255,255,0.60);
+  --w40:       rgba(255,255,255,0.40);
+  --w20:       rgba(255,255,255,0.20);
+  --w08:       rgba(255,255,255,0.08);
+  --font:      'Inter', sans-serif;
+  --font-head: 'Barlow Condensed', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 13px; scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--w80); font-family: var(--font); line-height: 1.6; }
+
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);
+  pointer-events: none; z-index: 999;
+}
+
+/* ── NAV ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 14px;
+  padding: 0 32px; height: 52px;
+  background: rgba(10,13,18,0.96);
+  border-bottom: 1px solid var(--border2);
+  backdrop-filter: blur(12px);
+}
+.nav-mark {
+  font-family: var(--font-head); font-size: 12px; font-weight: 800;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal);
+  border: 1px solid rgba(41,182,216,0.3); padding: 3px 10px; border-radius: 4px;
+}
+.nav-sep { width: 1px; height: 20px; background: var(--border2); }
+.nav-title { font-family: var(--font-head); font-size: 14px; font-weight: 700; color: var(--w80); }
+.nav-sub { font-size: 10px; color: var(--w40); font-family: var(--font-mono); }
+.nav-badge {
+  margin-left: auto;
+  font-size: 9px; font-weight: 700; font-family: var(--font-mono); letter-spacing: 0.08em;
+  padding: 4px 12px; border-radius: 4px;
+  border: 1px solid rgba(41,182,216,0.3); background: var(--teal-dim); color: var(--teal);
+}
+
+/* ── HERO ── */
+.hero {
+  padding: 48px 32px 36px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(41,182,216,0.04) 0%, transparent 60%);
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: 'SOP';
+  position: absolute; right: 40px; top: 24px;
+  font-family: var(--font-head); font-size: 120px; font-weight: 800;
+  color: rgba(41,182,216,0.04); letter-spacing: -0.02em; line-height: 1;
+  pointer-events: none; user-select: none;
+}
+.hero-eyebrow {
+  font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--teal); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.hero-eyebrow::before { content: '◈'; }
+.hero-title {
+  font-family: var(--font-head); font-size: 42px; font-weight: 800;
+  color: var(--white); line-height: 1.05; margin-bottom: 12px; letter-spacing: -0.01em;
+}
+.hero-title span { color: var(--teal); }
+.hero-desc { font-size: 14px; color: var(--w60); max-width: 640px; line-height: 1.65; }
+.hero-tags { display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+.hero-tag {
+  font-size: 10px; font-family: var(--font-mono); font-weight: 600;
+  padding: 4px 10px; border-radius: 4px; letter-spacing: 0.05em;
+  border: 1px solid var(--border2); background: var(--surface); color: var(--w60);
+}
+.hero-tag.teal { border-color: rgba(41,182,216,0.3); background: var(--teal-dim); color: var(--teal); }
+.hero-tag.gold { border-color: rgba(255,184,48,0.3); background: var(--gold-dim); color: var(--gold); }
+
+/* ── LAYOUT ── */
+.main { max-width: 960px; margin: 0 auto; padding: 40px 32px 80px; }
+
+/* ── SECTION HEADERS ── */
+.sec-head {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px; margin-top: 48px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border2);
+}
+.sec-head:first-child { margin-top: 0; }
+.sec-num {
+  font-family: var(--font-head); font-size: 22px; font-weight: 800;
+  color: var(--teal); min-width: 32px;
+}
+.sec-title {
+  font-family: var(--font-head); font-size: 20px; font-weight: 700;
+  color: var(--white); letter-spacing: 0.01em;
+}
+.sec-badge {
+  margin-left: auto; font-size: 9px; font-family: var(--font-mono); font-weight: 700;
+  letter-spacing: 0.08em; padding: 3px 9px; border-radius: 3px;
+}
+.badge-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(61,214,140,0.3); }
+.badge-gold  { background: var(--gold-dim);  color: var(--gold);  border: 1px solid rgba(255,184,48,0.3); }
+.badge-red   { background: var(--red-dim);   color: var(--red);   border: 1px solid rgba(255,85,85,0.3); }
+.badge-teal  { background: var(--teal-dim);  color: var(--teal);  border: 1px solid rgba(41,182,216,0.3); }
+
+/* ── CALLOUT BOXES ── */
+.callout {
+  border-radius: 8px; padding: 16px 20px; margin-bottom: 16px;
+  border-left: 3px solid;
+}
+.callout-teal  { background: var(--teal-dim);  border-color: var(--teal);  }
+.callout-gold  { background: var(--gold-dim);  border-color: var(--gold);  }
+.callout-red   { background: var(--red-dim);   border-color: var(--red);   }
+.callout-green { background: var(--green-dim); border-color: var(--green); }
+.callout-title {
+  font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.10em; text-transform: uppercase; margin-bottom: 6px;
+}
+.callout-teal  .callout-title { color: var(--teal);  }
+.callout-gold  .callout-title { color: var(--gold);  }
+.callout-red   .callout-title { color: var(--red);   }
+.callout-green .callout-title { color: var(--green); }
+.callout p { font-size: 13px; color: var(--w80); line-height: 1.6; }
+.callout p + p { margin-top: 6px; }
+
+/* ── STEP CARDS ── */
+.steps { display: flex; flex-direction: column; gap: 12px; }
+.step {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 18px 20px;
+  display: flex; gap: 18px; align-items: flex-start;
+  transition: border-color .15s;
+}
+.step:hover { border-color: var(--border2); }
+.step-num {
+  font-family: var(--font-head); font-size: 28px; font-weight: 800;
+  color: var(--teal); line-height: 1; min-width: 36px; padding-top: 2px;
+}
+.step-body { flex: 1; }
+.step-title {
+  font-family: var(--font-head); font-size: 16px; font-weight: 700;
+  color: var(--white); margin-bottom: 6px;
+}
+.step-desc { font-size: 13px; color: var(--w60); line-height: 1.6; }
+.step-desc strong { color: var(--w80); font-weight: 600; }
+.step-tag {
+  display: inline-block; margin-top: 8px;
+  font-size: 9px; font-family: var(--font-mono); font-weight: 700;
+  letter-spacing: 0.07em; padding: 3px 8px; border-radius: 3px;
+  background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(41,182,216,0.3);
+}
+.step-tag.gold { background: var(--gold-dim); color: var(--gold); border-color: rgba(255,184,48,0.3); }
+.step-tag.red  { background: var(--red-dim);  color: var(--red);  border-color: rgba(255,85,85,0.3); }
+
+/* ── FILE TABLE ── */
+.file-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+.file-table th {
+  font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+  letter-spacing: 0.09em; text-transform: uppercase; color: var(--w40);
+  padding: 8px 12px; text-align: left;
+  border-bottom: 1px solid var(--border2); background: var(--surface);
+}
+.file-table td {
+  font-size: 12px; color: var(--w80); padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.file-table tr:last-child td { border-bottom: none; }
+.file-table tr:hover td { background: rgba(255,255,255,0.02); }
+.file-name { font-family: var(--font-mono); font-size: 11px; color: var(--teal); font-weight: 500; }
+.file-desc { color: var(--w60); font-size: 12px; }
+
+/* ── RULE GRID ── */
+.rule-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.rule-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 16px 18px;
+}
+.rule-card-title {
+  font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 10px;
+}
+.rule-card.green .rule-card-title { color: var(--green); }
+.rule-card.red   .rule-card-title { color: var(--red);   }
+.rule-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.rule-list li {
+  font-size: 12px; color: var(--w60); padding-left: 16px; position: relative; line-height: 1.5;
+}
+.rule-list li::before { position: absolute; left: 0; font-size: 10px; top: 2px; }
+.rule-card.green .rule-list li::before { content: '✓'; color: var(--green); }
+.rule-card.red   .rule-list li::before { content: '✗'; color: var(--red);   }
+.rule-list li strong { color: var(--w80); font-weight: 600; }
+
+/* ── VALIDATION TABLE ── */
+.val-table { width: 100%; border-collapse: collapse; }
+.val-table th {
+  font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+  letter-spacing: 0.09em; text-transform: uppercase; color: var(--w40);
+  padding: 8px 12px; text-align: left; background: var(--surface);
+  border-bottom: 1px solid var(--border2);
+}
+.val-table td {
+  font-size: 12px; padding: 9px 12px;
+  border-bottom: 1px solid var(--border); color: var(--w60);
+}
+.val-table tr:last-child td { border-bottom: none; }
+.val-check { font-family: var(--font-mono); font-size: 11px; color: var(--w80); }
+.val-pass  { color: var(--green); font-family: var(--font-mono); font-size: 10px; font-weight: 700; }
+
+/* ── FORMULA BOX ── */
+.formula {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 8px; padding: 18px 20px; margin-bottom: 16px;
+}
+.formula-title {
+  font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.09em; text-transform: uppercase; color: var(--teal); margin-bottom: 12px;
+}
+.formula-eq {
+  font-family: var(--font-mono); font-size: 14px; font-weight: 700;
+  color: var(--white); margin-bottom: 8px;
+  background: rgba(0,0,0,0.25); padding: 10px 14px; border-radius: 5px;
+  border: 1px solid var(--border);
+}
+.formula-parts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.fp {
+  font-size: 11px; font-family: var(--font-mono);
+  padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border2);
+  background: var(--surface2); color: var(--w60);
+}
+.fp span { color: var(--teal); font-weight: 700; }
+
+/* ── INLINE CODE ── */
+code {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  background: rgba(41,182,216,0.1); color: var(--teal);
+  padding: 2px 6px; border-radius: 3px; border: 1px solid rgba(41,182,216,0.2);
+}
+
+/* ── GRADE PILLS ── */
+.grade {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 4px;
+  font-family: var(--font-head); font-size: 14px; font-weight: 800;
+}
+.grade-a { background: rgba(61,214,140,0.2);  color: var(--green); border: 1px solid rgba(61,214,140,0.4); }
+.grade-b { background: rgba(41,182,216,0.15); color: var(--teal);  border: 1px solid rgba(41,182,216,0.35); }
+.grade-c { background: rgba(255,179,71,0.15); color: var(--amber); border: 1px solid rgba(255,179,71,0.35); }
+.grade-d { background: rgba(255,85,85,0.12);  color: var(--red);   border: 1px solid rgba(255,85,85,0.3); }
+.grade-f { background: rgba(255,85,85,0.18);  color: #ff7070;      border: 1px solid rgba(255,85,85,0.4); }
+
+/* ── DIVIDER ── */
+.divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border); padding: 24px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 11px; font-family: var(--font-mono); color: var(--w40);
+}
+footer strong { color: var(--w60); }
+footer a { color: var(--teal); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+/* ── NOTICE STRIP ── */
+.notice-strip {
+  background: linear-gradient(90deg, rgba(41,182,216,0.08), rgba(41,182,216,0.03));
+  border: 1px solid rgba(41,182,216,0.2); border-radius: 6px;
+  padding: 12px 18px; margin-bottom: 24px;
+  display: flex; align-items: center; gap: 12px;
+}
+.notice-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); flex-shrink: 0; box-shadow: 0 0 0 3px rgba(41,182,216,0.2); }
+.notice-text { font-size: 12px; color: var(--w60); line-height: 1.5; }
+.notice-text strong { color: var(--teal); }
+
+@media (max-width: 640px) {
+  .rule-grid { grid-template-columns: 1fr; }
+  .hero-title { font-size: 30px; }
+  .main { padding: 24px 20px 60px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark">QM//RP</div>
+  <div class="nav-sep"></div>
+  <div>
+    <div class="nav-title">Right Pricing Dashboard — Weekly Update SOP</div>
+    <div class="nav-sub">Joanie Reporting Hub · Centerfield Health &amp; Medicare</div>
+  </div>
+  <div class="nav-badge">Version 2.0 · May 2026</div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Joanie Reporting Hub · Standard Operating Procedure</div>
+  <div class="hero-title">QM Right Pricing<br><span>Weekly Update Guide</span></div>
+  <div class="hero-desc">Everything your team needs to run the weekly (or intraweekly) MPQS + Right Pricing + Scorecard update. Drop your Looker data in this shared Claude project and Joanie handles the rest — without changing anything that shouldn't be changed.</div>
+  <div class="hero-tags">
+    <span class="hero-tag teal">MPQS Scoring</span>
+    <span class="hero-tag teal">Right Pricing</span>
+    <span class="hero-tag teal">Publisher Scorecards</span>
+    <span class="hero-tag gold">Date Picker Functional</span>
+    <span class="hero-tag">SEP · OEP · AEP</span>
+    <span class="hero-tag">22 Publishers</span>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- IMPORTANT NOTICE -->
+  <div class="notice-strip" style="margin-top: 0;">
+    <div class="notice-dot"></div>
+    <div class="notice-text">
+      <strong>Yes — if anyone on the team uploads the Looker data files and drops a message in this shared Claude project, Joanie knows exactly what to do.</strong>
+      The current SOT (<code>index.html</code>) is the locked baseline. Only the three data blocks get updated. Nothing else is ever touched.
+    </div>
+  </div>
+
+  <!-- SECTION 1: WHAT YOU NEED -->
+  <div class="sec-head">
+    <div class="sec-num">01</div>
+    <div class="sec-title">What to Pull from Looker</div>
+    <span class="sec-badge badge-teal">Joanie Dashboard · 4 exports</span>
+  </div>
+
+  <div class="callout callout-teal">
+    <div class="callout-title">How to export</div>
+    <p>In Looker, go to the <strong>Joanie Dashboard</strong>. Use the shared "QM RP Weekly Export" look group. Export each of the four reports below as <strong>CSV with headers</strong>. Zip all four files together and upload to this project chat.</p>
+  </div>
+
+  <table class="file-table">
+    <thead>
+      <tr>
+        <th>File</th>
+        <th>Looker Report / Look</th>
+        <th>Key Columns Used</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><div class="file-name">source_performance.csv</div></td>
+        <td class="file-desc">Source Performance · grouped by Source + Month</td>
+        <td class="file-desc">Inbound Contacts, D1 QM Unique 60+s, QM Marketing Spend, Net Policies, Media CPA, Avg Policy LTV, GP, GP per Talk Hour, SCR 60+s%, Cost per D1</td>
+      </tr>
+      <tr>
+        <td><div class="file-name">source_subids.csv</div></td>
+        <td class="file-desc">Source + Sub ID Performance · by Source + Campaign Angle</td>
+        <td class="file-desc">Campaign Ad Type, Campaign Product, Campaign Angle, all performance columns — identifies creative angle (grocery, flex-card, OTC, etc.)</td>
+      </tr>
+      <tr>
+        <td><div class="file-name">mpqs_durability.csv</div></td>
+        <td class="file-desc">MPQS Durability · grouped by Source + Week</td>
+        <td class="file-desc">CR%, Talk Hours, Net Sales, Eff%, RDE%, % Sales Over 75, 1–3 Month Persistency %</td>
+      </tr>
+      <tr>
+        <td><div class="file-name">source_age_bands.csv</div></td>
+        <td class="file-desc">Age Band Breakdown · by Source</td>
+        <td class="file-desc">% of Sales by age group — specifically <strong>i: 75+</strong> column which feeds the Age75+ MPQS KPI</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-gold">
+    <div class="callout-title">Intraweekly runs</div>
+    <p>For mid-week updates, export the same four files with the current month's data accumulated to date. The date picker on the dashboard will show the correct period automatically. No other changes needed.</p>
+  </div>
+
+  <!-- SECTION 2: HOW TO RUN IT -->
+  <div class="sec-head">
+    <div class="sec-num">02</div>
+    <div class="sec-title">How to Run the Update</div>
+    <span class="sec-badge badge-green">3 steps</span>
+  </div>
+
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Upload the Joanie zip to this Claude project</div>
+        <div class="step-desc">
+          Zip all four CSV files from Looker into a single file (e.g. <strong>SEP_to_date_Joanie.zip</strong>) and upload it directly to the chat in this shared Claude project. You do not need to rename the files — Joanie reads all four by name automatically.
+        </div>
+        <span class="step-tag">This project · Shared workspace</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Type your run message</div>
+        <div class="step-desc">
+          A simple message is all that's needed. Joanie will read the SOT from project files, process all four data sources, run MPQS scoring, calculate Right Pricing bids, generate scorecards, and produce the updated dashboard HTML. You can say something as simple as:
+          <br><br>
+          <strong>"Run MPQS, Right Pricing and Scorecards for [month] with the attached files"</strong>
+          <br><br>
+          Joanie will confirm what data it found, show a publisher-level summary, and deliver the updated file.
+        </div>
+        <span class="step-tag">Natural language · No special syntax</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Download the output and verify before going live</div>
+        <div class="step-desc">
+          Joanie delivers a single HTML file (e.g. <strong>qm_rp_[month]_final.html</strong>). Open it locally and spot-check three things before replacing the live SOT:
+          <br><br>
+          <strong>(a)</strong> Page loads with no spinner hang<br>
+          <strong>(b)</strong> Pick one publisher you know well — confirm their partner card shows correct Raw Calls, D1, Net Sales, and CPA<br>
+          <strong>(c)</strong> Switch the date picker from the current month to the prior month — confirm all numbers change
+          <br><br>
+          If all three pass, replace <code>index.html</code> in this project with the new file. That becomes the new SOT for all future runs.
+        </div>
+        <span class="step-tag gold">SOT update · Replace index.html</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SECTION 3: WHAT JOANIE DOES -->
+  <div class="sec-head">
+    <div class="sec-num">03</div>
+    <div class="sec-title">What Joanie Calculates</div>
+    <span class="sec-badge badge-teal">Automated</span>
+  </div>
+
+  <div class="formula">
+    <div class="formula-title">MPQS Score — Publisher Quality Index</div>
+    <div class="formula-eq">Score = (GP/TH × 0.30) + (CR × 0.20) + (Eff × 0.25) + (RDE_inv × 0.15) + (Age75_inv × 0.10)</div>
+    <div class="formula-parts">
+      <div class="fp"><span>A</span> ≥ 91 · Scale Eligible</div>
+      <div class="fp"><span>B</span> 84–90 · Maintain</div>
+      <div class="fp"><span>C</span> 74–83 · Monitor</div>
+      <div class="fp"><span>D</span> 64–73 · Pullback</div>
+      <div class="fp"><span>F</span> &lt;64 · Pullback</div>
+    </div>
+  </div>
+
+  <div class="formula">
+    <div class="formula-title">Enhanced Right Pricing Bid</div>
+    <div class="formula-eq">Enhanced Bid = LTV × Eff% × LTV% × CR% × MPQS_Multiplier × SubID_QI</div>
+    <div class="formula-parts">
+      <div class="fp">Grade A <span>×1.15</span></div>
+      <div class="fp">Grade B <span>×1.00</span></div>
+      <div class="fp">Grade C <span>×0.85</span></div>
+      <div class="fp">Grade D <span>×0.70</span></div>
+      <div class="fp">Grade F <span>×0.55</span></div>
+      <div class="fp">FLEX-CARD <span>QI ×1.10</span></div>
+      <div class="fp">GROCERY <span>QI ×1.05</span></div>
+      <div class="fp">OTC <span>QI ×0.88</span></div>
+      <div class="fp">DENTAL <span>QI ×0.95</span></div>
+      <div class="fp">GENERAL <span>QI ×0.92</span></div>
+    </div>
+  </div>
+
+  <p style="font-size:12px; color:var(--w40); margin-top: -8px; margin-bottom: 20px;">SEP season targets: CPA $400 · CR 7% · Eff 72% · RDE ≤15% · Age75+ ≤15% · GP/TH $10</p>
+
+  <!-- SECTION 4: LOCKED RULES -->
+  <div class="sec-head">
+    <div class="sec-num">04</div>
+    <div class="sec-title">The Locked Rules — What Changes vs What Never Changes</div>
+    <span class="sec-badge badge-red">Read carefully</span>
+  </div>
+
+  <div class="callout callout-red">
+    <div class="callout-title">Critical — SOT integrity</div>
+    <p>Every run starts from <code>index.html</code> in this project (the SOT). Joanie never works from a previous output file. The SOT is the single source of truth for all JS functions, CSS, HTML structure, and OEP/AEP season data. Only the data blocks below are ever updated.</p>
+  </div>
+
+  <div class="rule-grid">
+    <div class="rule-card green">
+      <div class="rule-card-title">✓ Updated every run</div>
+      <ul class="rule-list">
+        <li><strong>NOTION_DATA</strong> — publisher scores for current month (22 pubs × 3 seasons)</li>
+        <li><strong>SCORECARD_DATA</strong> — new month's rows prepended; all prior months kept for date picker</li>
+        <li><strong>AGG_CPD1 / TGT_CPD1</strong> — aggregate cost-per-D1 constant</li>
+        <li><strong>Date picker defaults</strong> — 8 find/replace strings updated to current month</li>
+      </ul>
+    </div>
+    <div class="rule-card red">
+      <div class="rule-card-title">✗ Never touched</div>
+      <ul class="rule-list">
+        <li><strong>All JS functions</strong> — loadData, renderRP, buildPartnerCard, dpRender, etc.</li>
+        <li><strong>CSS and HTML structure</strong> — layout, styling, colors, fonts</li>
+        <li><strong>OEP and AEP data</strong> in SCORECARD_DATA — preserved verbatim from SOT</li>
+        <li><strong>var DP declaration</strong> — must stay with state vars at top of script</li>
+        <li><strong>SUBID_DATA, MPQS_MULT, SEASONS config</strong> — only changed by explicit request</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 5: VALIDATION -->
+  <div class="sec-head">
+    <div class="sec-num">05</div>
+    <div class="sec-title">Validation — Joanie Self-Checks Before Delivering</div>
+    <span class="sec-badge badge-green">47 checks · auto-run</span>
+  </div>
+
+  <p style="font-size:13px; color:var(--w60); margin-bottom:16px; line-height:1.6;">Joanie runs a 47-point validation before writing any output file. If any check fails, the file is not written and you'll see the specific error. The most critical checks:</p>
+
+  <table class="val-table">
+    <thead>
+      <tr><th>Check</th><th>What it catches</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="val-check">No double <code>];</code> in SCORECARD_DATA</td><td style="color:var(--w60);font-size:12px;">The #1 historical load failure cause — OEP block append adding a second close bracket</td><td class="val-pass">AUTO</td></tr>
+      <tr><td class="val-check">All 20 JS functions present exactly once</td><td style="color:var(--w60);font-size:12px;">Catches accidental deletion or duplication of any render function</td><td class="val-pass">AUTO</td></tr>
+      <tr><td class="val-check"><code>var DP</code> declared before <code>loadData()</code> init call</td><td style="color:var(--w60);font-size:12px;">The #2 historical bug — date picker state undefined at init, causing all call data to show zero</td><td class="val-pass">AUTO</td></tr>
+      <tr><td class="val-check">SCORECARD_DATA has Apr + May + OEP rows</td><td style="color:var(--w60);font-size:12px;">Ensures date picker has data to switch between</td><td class="val-pass">AUTO</td></tr>
+      <tr><td class="val-check"><code>dpRender()</code> calls both <code>loadData()</code> and <code>refreshAll()</code></td><td style="color:var(--w60);font-size:12px;">Ensures date picker re-filters data, not just the label</td><td class="val-pass">AUTO</td></tr>
+      <tr><td class="val-check">NOTION_DATA is valid JSON with 22 SEP rows</td><td style="color:var(--w60);font-size:12px;">Catches malformed publisher data or missing publishers</td><td class="val-pass">AUTO</td></tr>
+      <tr><td class="val-check">No stale <code>const CSV_ACTUALS</code> floating block</td><td style="color:var(--w60);font-size:12px;">Old pattern that only ran once at init rather than on each date change</td><td class="val-pass">AUTO</td></tr>
+    </tbody>
+  </table>
+
+  <!-- SECTION 6: DATE PICKER -->
+  <div class="sec-head">
+    <div class="sec-num">06</div>
+    <div class="sec-title">Using the Date Picker</div>
+    <span class="sec-badge badge-gold">Functional as of May 2026</span>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num" style="font-size:20px;min-width:28px;">📅</div>
+      <div class="step-body">
+        <div class="step-title">Month mode (default)</div>
+        <div class="step-desc">The dashboard defaults to the current run month. Click the month input, select any prior month, and all tables, charts, partner scorecards, and the ticker update immediately to that period's actuals.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="font-size:20px;min-width:28px;">📆</div>
+      <div class="step-body">
+        <div class="step-title">Custom range, Week, Day, Year modes</div>
+        <div class="step-desc">Switch modes using the Day · Week · Month · Year · Custom buttons. For intraweekly analysis, use <strong>Custom</strong> to set a specific date range. The dashboard filters all publisher data to only rows with dates within that window.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="font-size:20px;min-width:28px;">↺</div>
+      <div class="step-body">
+        <div class="step-title">Reset button</div>
+        <div class="step-desc">The <strong>↺</strong> button in the date picker resets to the current run month. Use it to return to the latest data after browsing historical periods.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: MPQS QUICK REFERENCE -->
+  <div class="sec-head">
+    <div class="sec-num">07</div>
+    <div class="sec-title">MPQS Grade Quick Reference</div>
+    <span class="sec-badge badge-teal">For partner conversations</span>
+  </div>
+
+  <table class="val-table">
+    <thead>
+      <tr><th>Grade</th><th>Score</th><th>Band</th><th>Bid Action</th><th>What it means</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="grade grade-a">A</span></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--green);">≥ 91</td>
+        <td style="color:var(--green);font-size:12px;font-weight:600;">Scale Eligible</td>
+        <td style="font-family:var(--font-mono);font-size:11px;">× 1.15</td>
+        <td style="color:var(--w60);font-size:12px;">All KPIs at or above target. Scale volume at current or increased bid.</td>
+      </tr>
+      <tr>
+        <td><span class="grade grade-b">B</span></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--teal);">84–90</td>
+        <td style="color:var(--teal);font-size:12px;font-weight:600;">Maintain</td>
+        <td style="font-family:var(--font-mono);font-size:11px;">× 1.00</td>
+        <td style="color:var(--w60);font-size:12px;">Solid quality. Hold current bid and volume. Work on gap KPIs.</td>
+      </tr>
+      <tr>
+        <td><span class="grade grade-c">C</span></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--amber);">74–83</td>
+        <td style="color:var(--amber);font-size:12px;font-weight:600;">Monitor</td>
+        <td style="font-family:var(--font-mono);font-size:11px;">× 0.85</td>
+        <td style="color:var(--w60);font-size:12px;">Quality gap in 1–2 KPIs. Reduced bid. Partner needs corrective action plan.</td>
+      </tr>
+      <tr>
+        <td><span class="grade grade-d">D</span></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--red);">64–73</td>
+        <td style="color:var(--red);font-size:12px;font-weight:600;">Pullback</td>
+        <td style="font-family:var(--font-mono);font-size:11px;">× 0.70</td>
+        <td style="color:var(--w60);font-size:12px;">Multiple KPIs failing. Significant bid reduction. Review creative mix and targeting.</td>
+      </tr>
+      <tr>
+        <td><span class="grade grade-f">F</span></td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:#ff7070;">&lt; 64</td>
+        <td style="color:#ff7070;font-size:12px;font-weight:600;">Pullback / Suspend</td>
+        <td style="font-family:var(--font-mono);font-size:11px;">× 0.55</td>
+        <td style="color:var(--w60);font-size:12px;">Economics and/or durability failing. Minimum bid or pause pending plan.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 8: PARTNER PORTAL -->
+  <div class="sec-head">
+    <div class="sec-num">08</div>
+    <div class="sec-title">Sharing with Media Partners</div>
+    <span class="sec-badge badge-teal">Partner Portal</span>
+  </div>
+
+  <p style="font-size:13px;color:var(--w60);margin-bottom:16px;line-height:1.6;">The dashboard includes a <strong>Partner Portal view</strong> — a clean, partner-facing scorecard that shows each publisher only their own data vs our targets. No internal bids, no competitive data, no internal formulas.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num" style="font-size:18px;min-width:28px;">⊞</div>
+      <div class="step-body">
+        <div class="step-title">Open Partner Portal</div>
+        <div class="step-desc">Click <strong>⊞ Partner Portal</strong> in the top-right of the dashboard. Select the publisher from the dropdown. The portal shows their MPQS grade, KPI actuals vs targets, Enhanced RP bid, Sub ID performance, and "What This Means For You" guidance — formatted for a partner conversation or email.</div>
+        <span class="step-tag">PDF export available</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="font-size:18px;min-width:28px;">📥</div>
+      <div class="step-body">
+        <div class="step-title">Export the scorecard as PDF</div>
+        <div class="step-desc">Each partner's portal card has a <strong>Download PDF</strong> button. Send the PDF directly to your media partner contact. It shows their data points clearly against our SEP targets with plain-language guidance on what they need to improve to unlock a higher bid.</div>
+        <span class="step-tag gold">Partner-ready · No internal data exposed</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CONFIRMATION BOX -->
+  <div class="callout callout-green">
+    <div class="callout-title">✓ Confirmed — How this shared project works</div>
+    <p><strong>Yes.</strong> Anyone on the team can drop the four Looker CSVs (zipped) into a message in this shared Claude project and say "run MPQS and Right Pricing for [month]." Joanie will read the current SOT from the project files, process the data, run the full scoring and RP calculation, validate the output against all 47 checks, and deliver the updated dashboard HTML. Nothing in the SOT — no functions, no CSS, no structure — will be changed.</p>
+    <p style="margin-top:8px;">The only things that change each run: publisher data scores (NOTION_DATA), scorecard actuals (SCORECARD_DATA), and the date picker default month. Everything else is locked.</p>
+  </div>
+
+  <!-- NOTION LINKS -->
+  <div class="sec-head" style="margin-top:32px;">
+    <div class="sec-num">↗</div>
+    <div class="sec-title">Notion Links</div>
+  </div>
+
+  <table class="val-table">
+    <thead><tr><th>Page</th><th>URL</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td style="color:var(--w80);font-size:12px;font-weight:600;">Joanie Reporting Hub</td><td><a href="https://www.notion.so/337cb15b39018030aa3ef853242aa527" target="_blank" style="color:var(--teal);font-family:var(--font-mono);font-size:11px;">notion.so/Joanie-Hub</a></td><td style="color:var(--w60);font-size:12px;">Main hub — this SOP lives here</td></tr>
+      <tr><td style="color:var(--w80);font-size:12px;font-weight:600;">QM Right Pricing DB</td><td><a href="https://www.notion.so/a64a0fd07f5b4aa18b12639b8bf7a87d" target="_blank" style="color:var(--teal);font-family:var(--font-mono);font-size:11px;">notion.so/QM-Right-Pricing</a></td><td style="color:var(--w60);font-size:12px;">Publisher RP scores and bid outputs</td></tr>
+      <tr><td style="color:var(--w80);font-size:12px;font-weight:600;">QM Scorecards DB</td><td><a href="https://www.notion.so/337cb15b3901805283ccdf1d7a6bb34e" target="_blank" style="color:var(--teal);font-family:var(--font-mono);font-size:11px;">notion.so/QM-Scorecards</a></td><td style="color:var(--w60);font-size:12px;">Partner-level MPQS scorecards</td></tr>
+      <tr><td style="color:var(--w80);font-size:12px;font-weight:600;">Joanie MPQS DB</td><td><a href="https://www.notion.so/337cb15b390180f992c1ca0f87a30dfd" target="_blank" style="color:var(--teal);font-family:var(--font-mono);font-size:11px;">notion.so/Joanie-MPQS</a></td><td style="color:var(--w60);font-size:12px;">Full MPQS scoring history by publisher</td></tr>
+    </tbody>
+  </table>
+
+</div>
+
+<footer>
+  <div><strong>Joanie</strong> · QM Right Pricing SOP · Centerfield Health &amp; Medicare · Version 2.0 · May 2026</div>
+  <div>Enhanced RP Formula: Base × MPQS Multiplier × Sub ID Quality Index · <strong>"We Supercharge Your Customer Acquisition"</strong></div>
+</footer>
+
+</body>
+</html>
